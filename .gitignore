@@ -1,5 +1,3 @@
 */.DS_Store
-data/*
-!data/*.geojson
 *__pycache__/
 .vscode
