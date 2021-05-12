@@ -57,7 +57,6 @@
 #         dataset.GetRasterBand(1).WriteArray(im_data)
 #         del dataset
 
-
 import rasterio as rio
 import numpy as np
 
@@ -67,14 +66,15 @@ def readTiff(path_in):
         input: path of the .tif image
         output: rasterio DatasetReader object, and np.array data (image)
     '''
-    image_src = rio.open(path_in)
-    if image_src.count > 1:
-        bands_ind = [i for i in range(1, image_src.count+1)]
-        image = image_src.read(bands_ind)
-        image = image.transpose(1, 2, 0)
+    img_src = rio.open(path_in)
+    if img_src.count > 1:
+        bands_ind = [i for i in range(1, img_src.count+1)]
+        img_array = img_src.read(bands_ind)
+        img_array = img_array.transpose(1, 2, 0)
     else: 
-        image = image_src.read(1)
-    return image_src, image
+        img_array = img_src.read(1)
+    return img_src, img_array
+
 
 def writeTiff(im_data, im_transform, im_crs, path_out):
     '''im_data: 3d (row, col, band) np.array.'''
