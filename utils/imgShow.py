@@ -29,7 +29,8 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
         img_color_clip = np.zeros_like(img_color)
         if per_band_clip == 'True':
             for i in range(img_color.shape[-1]):
-                img_color_hist = np.percentile(img_color[:,:,i], [clip_percent, 100-clip_percent])
+                img_color_hist = np.percentile(img_color[:,:,i], [clip_percent, \
+                                    100-clip_percent])
                 img_color_clip[:,:,i] = (img_color[:,:,i]-img_color_hist[0])\
                                     /(img_color_hist[1]-img_color_hist[0]+0.0001)
         else:
