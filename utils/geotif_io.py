@@ -1,5 +1,8 @@
-from osgeo import gdal
+## author: luo xin, date: 2021.6.17
+
 import numpy as np
+from osgeo import gdal
+from osgeo import osr
 
 ### tiff image reading
 def readTiff(path_in):
@@ -21,8 +24,10 @@ def readTiff(path_in):
     y_max = im_geotrans[3]
     y_min = y_max + im_geotrans[5] * im_row
     extent = (x_min,x_max, y_min, y_max)
-    img_info = {'extent':extent, 'geotrans':im_geotrans, \
-                'geoproj':im_proj, 'row': im_row, 'col': im_col,\
+    espg_code = osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1)
+
+    img_info = {'geoextent':extent, 'geotrans':im_geotrans, \
+                'geosrs':espg_code, 'row': im_row, 'col': im_col,\
                     'bands':im_bands}
 
     if im_bands > 1:
@@ -32,9 +37,11 @@ def readTiff(path_in):
         return img_array, img_info
 
 ###  .tiff image write
-def writeTiff(im_data, im_geotrans, im_proj, path_out):
+def writeTiff(im_data, im_geotrans, im_geosrs, path_out):
     '''
-    im_data: tow dimentions (order: row, col),or three dimentions (order: row, col, band)
+    input:
+        im_data: tow dimentions (order: row, col),or three dimentions (order: row, col, band)
+        im_geosrs: espg code for image spatial reference system.
     '''
     if 'int8' in im_data.dtype.name:
         datatype = gdal.GDT_Byte
@@ -51,7 +58,7 @@ def writeTiff(im_data, im_geotrans, im_proj, path_out):
     dataset = driver.Create(path_out, im_width, im_height, im_bands, datatype)
     if(dataset!= None):
         dataset.SetGeoTransform(im_geotrans)    # 
-        dataset.SetProjection(im_proj)      # 
+        dataset.SetProjection("EPSG:" + str(im_geosrs))      # 
     if im_bands > 1:
         for i in range(im_bands):
             dataset.GetRasterBand(i+1).WriteArray(im_data[i])
