@@ -1,7 +1,6 @@
 ### ----- author: luo xin, date: 2021.6.15 -----
 
 import numpy as np
-from osgeo import osr
 
 def geo2imagexy(lon, lat, gdal_trans):
     '''

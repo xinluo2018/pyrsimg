@@ -1,4 +1,4 @@
-## author: luo xin, date: 2021.6.17
+## author: luo xin, date: 2021.6.18
 
 import numpy as np
 from osgeo import gdal
@@ -7,7 +7,6 @@ from osgeo import osr
 ### tiff image reading
 def readTiff(path_in):
     '''
-    author: xin luo, date: 2021.4.11
     return: 
         img: numpy array, exent: tuple, (x_min, x_max, y_min, y_max) 
         proj info, and dimentions: (row, col, band)
@@ -19,16 +18,16 @@ def readTiff(path_in):
     im_geotrans = RS_Data.GetGeoTransform()  # 
     im_proj = RS_Data.GetProjection()  # 
     img_array = RS_Data.ReadAsArray(0, 0, im_col, im_row)  # 
-    x_min = im_geotrans[0]
-    x_max = x_min + im_geotrans[1] * im_col
-    y_max = im_geotrans[3]
-    y_min = y_max + im_geotrans[5] * im_row
-    extent = (x_min,x_max, y_min, y_max)
+    left = im_geotrans[0]
+    up = im_geotrans[3]
+    right = left + im_geotrans[1] * im_col + im_geotrans[2] * im_row
+    bottom = up + im_geotrans[5] * im_row + im_geotrans[4] * im_col
+    extent = (left, right, bottom, up)
     espg_code = osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1)
 
-    img_info = {'geoextent':extent, 'geotrans':im_geotrans, \
-                'geosrs':espg_code, 'row': im_row, 'col': im_col,\
-                    'bands':im_bands}
+    img_info = {'geoextent': extent, 'geotrans':im_geotrans, \
+                'geosrs': espg_code, 'row': im_row, 'col': im_col,\
+                    'bands': im_bands}
 
     if im_bands > 1:
         img_array = np.transpose(img_array, (1, 2, 0)).astype(np.float)  # 
@@ -41,7 +40,7 @@ def writeTiff(im_data, im_geotrans, im_geosrs, path_out):
     '''
     input:
         im_data: tow dimentions (order: row, col),or three dimentions (order: row, col, band)
-        im_geosrs: espg code for image spatial reference system.
+        im_geosrs: espg code correspond to image spatial reference system.
     '''
     if 'int8' in im_data.dtype.name:
         datatype = gdal.GDT_Byte
@@ -57,7 +56,7 @@ def writeTiff(im_data, im_geotrans, im_geosrs, path_out):
     driver = gdal.GetDriverByName("GTiff")
     dataset = driver.Create(path_out, im_width, im_height, im_bands, datatype)
     if(dataset!= None):
-        dataset.SetGeoTransform(im_geotrans)    # 
+        dataset.SetGeoTransform(im_geotrans)       # 
         dataset.SetProjection("EPSG:" + str(im_geosrs))      # 
     if im_bands > 1:
         for i in range(im_bands):
