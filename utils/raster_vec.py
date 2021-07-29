@@ -39,7 +39,7 @@ def raster2vec(raster_path, output_path, dn_values):
 def vec2mask(vec_path, raster_path, output_path):
     """
     des: generate/save mask file using the vector file(e.g.,.shp,.gpkg).
-    author: jinhua zhang, create: 2021.3.13
+    author: jinhua zhang, create: 2021.3.13, modify: 2021.7.28
     input: 
         vec_path, raster_path, output_path: str
     retrun: 
@@ -57,7 +57,7 @@ def vec2mask(vec_path, raster_path, output_path):
     NoData_value = -9999
     band.SetNoDataValue(NoData_value)
     band.FlushCache()
-    gdal.RasterizeLayer(targetDataset, [1], layer)
+    gdal.RasterizeLayer(targetDataset, [1], layer, burn_values=[1])
     mask = targetDataset.ReadAsArray(0, 0, x_res, y_res)
     mask = np.where(mask>0, 1, 0)
     return mask
