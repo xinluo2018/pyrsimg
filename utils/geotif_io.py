@@ -7,6 +7,8 @@ from osgeo import osr
 ### tiff image reading
 def readTiff(path_in):
     '''
+    arg:
+        path_in: image path
     return: 
         img: numpy array, exent: tuple, (x_min, x_max, y_min, y_max) 
         proj info, and dimentions: (row, col, band)
