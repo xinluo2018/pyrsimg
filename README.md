@@ -21,4 +21,6 @@ Toolkit for easy processing of remote sensing image
 ## acc_vis
 - metrics_plot (in SWatNet/utils/metrics_plot.py)
 
-
+## to do
+- subset by vector
+- multiple images mosaic.

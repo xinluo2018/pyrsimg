@@ -1,26 +1,32 @@
 ## author: xin luo
-## create: 2020, modify: 2021.9.1
+## create: 2020, modify: 2021.9.19
+## des: remote sensing image visualization
 
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def imgShow(img, extent=None, color_bands=(2,1,0), \
-                            clip_percent=2, per_band_clip='False', focus=None):
+                        clip_percent=2, per_band_clip='False', focus=None):
     '''
     args:
         img: (row, col, band) or (row, col), DN range should be in [0,1]
         num_bands: a list/tuple, [red_band,green_band,blue_band]
         clip_percent: for linear strech, value within the range of 0-100. 
         per_band: if 'True', the band values will be clipped by each band respectively. 
-        focus: list, [row_start,row_end, col_start, col_end]
+        focus: list, [up_start_percent,down_end_percent, \
+                    left_start_percent, right_end_percent]; 0 < value < 1
     '''
     img = img.copy()
     img[np.isnan(img)]=0
     img = np.squeeze(img)
     row,col,_ = img.shape
     if focus:
-        row_start,row_end,col_start,col_end = focus
+        # row_start, row_end, col_start, col_end = focus
+        row_start_percent, row_end_percent, col_start_percent, col_end_percent = focus
+        row_start, row_end = int(row*row_start_percent), int(row*row_end_percent)
+        col_start, col_end = int(col*col_start_percent), int(col*col_end_percent)
         img = img[row_start:row_end, col_start:col_end,:]
         x_extent, y_extent = extent[1]-extent[0], extent[3]-extent[2]
         extent_x_min = (col_start/col)*x_extent + extent[0]
@@ -32,7 +38,7 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
         if len(img.shape) == 2:
             plt.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
         else:
-            plt.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0,vmax=1)
+            plt.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
     else:
         if len(img.shape) == 2:
             img_color = np.expand_dims(img, axis=2)
@@ -54,7 +60,8 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
                 img_color_hist = np.percentile(img_color, [clip_percent, 100-clip_percent])
             img_color_clip = (img_color-img_color_hist[0])\
                                      /(img_color_hist[1]-img_color_hist[0]+0.0001)
-        plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0,vmax=1)
+        plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
+
 
 
 
