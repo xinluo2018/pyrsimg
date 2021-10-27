@@ -13,13 +13,17 @@ Toolkit for easy processing of remote sensing image
 - **raster_vec**   
   raster2vec, vec2mask
 
-
 ## visual
-- **imgShow**   
+- **data**   
   imgShow, imsShow
+- **result** 
+  mertric_plot(in SWatNet/utils/metrics_plot.py)  
 
-## acc_vis
-- metrics_plot (in SWatNet/utils/metrics_plot.py)
+## metric (on going)
+- batch-based   
+  oa, miou, 
+- image-based   
+  oa, producer's, user' accuray, and confusion matrix.
 
 ## to do
 - subset by vector
