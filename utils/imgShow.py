@@ -1,5 +1,5 @@
 ## author: xin luo
-## create: 2020, modify: 2021.9.19
+## create: 2020, modify: 2021.10.27
 ## des: remote sensing image visualization
 
 
@@ -21,7 +21,10 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
     img = img.copy()
     img[np.isnan(img)]=0
     img = np.squeeze(img)
-    row,col,_ = img.shape
+    if len(img.shape) == 2:
+        row,col = img.shape
+    elif len(img.shape) == 3:
+        row,col,_ = img.shape
     if focus:
         # row_start, row_end, col_start, col_end = focus
         row_start_percent, row_end_percent, col_start_percent, col_end_percent = focus
