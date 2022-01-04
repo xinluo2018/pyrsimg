@@ -38,6 +38,7 @@ def raster2vec(raster_path, output_path, dn_values):
                 'properties': {'pixelvalue': int(pixel_value)}
             })
 
+
 def vec2mask(path_vec, path_raster, path_save=None):
     """
     des: generate/save mask file using the vector file(e.g.,.shp,.gpkg).
@@ -48,10 +49,10 @@ def vec2mask(path_vec, path_raster, path_save=None):
         mask, np.array.
         a .tiff file written to the given path
     """
-    raster,shp = gdal.Open(path_raster, gdal.GA_ReadOnly), ogr.Open(path_vec)
+    raster, vec = gdal.Open(path_raster, gdal.GA_ReadOnly), ogr.Open(path_vec)
     x_res = raster.RasterXSize
     y_res = raster.RasterYSize
-    layer = shp.GetLayer()
+    layer = vec.GetLayer()
     if path_save is None:
         drv = gdal.GetDriverByName('MEM')
         targetData = drv.Create('', x_res, y_res, 1, gdal.GDT_Byte)
@@ -70,4 +71,3 @@ def vec2mask(path_vec, path_raster, path_save=None):
     mask = np.where(mask>0, 1, 0)
     return mask
 
-    

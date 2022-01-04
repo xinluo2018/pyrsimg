@@ -19,7 +19,7 @@ class imgPatch():
         self.img_col = img.shape[1]
         self.img_patch_row = np.nan    # valid when call toPatch
         self.img_patch_col = np.nan
-        self.start_list = []       #  
+        self.start_list = []           #  
 
     def toPatch(self):
         '''

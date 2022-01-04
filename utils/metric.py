@@ -1,5 +1,6 @@
 ## author: xin luo
 ## create: 2021.10.27
+## modify: 2021.12.2
 
 import torch
 import numpy as np
@@ -75,3 +76,22 @@ def acc_matrix(cla_map,  sam_pixel=None, truth_map=None, id_label=None):
     else:
         return acc_oa, confus_mat
 
+def acc_miou(cla_map, truth_map, labels=None):
+    '''
+    des: calculate the mean IoU metric.
+    args:
+        cla_map: classification result of the full image
+        truth_map: truth image (either truth_map or sam_pixel should be given)
+        labels: a list, the class id for calculating. e.g., [0,1,2]
+    return:
+        MIoU score
+    '''  
+    iou = []
+    if labels == None:
+        labels = np.unique(truth_map)
+    for label in labels:
+        intersection = np.logical_and(cla_map==label, truth_map==label)
+        union = np.logical_or(cla_map==label, truth_map==label)
+        iou_score = np.sum(intersection)/np.sum(union)
+        iou.append(iou_score)
+    return np.mean(iou)
