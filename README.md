@@ -10,6 +10,8 @@ Toolkit for easy processing of remote sensing image
   imgPatch (class): toPatch, higher_patch_crop, toImage   
 - **transform_xy**   
   coor2coor, geo2imagexy, imagexy2geo
+- **image transform**   
+  lay_stack
 - **raster_vec**   
   raster2vec, vec2mask
 
