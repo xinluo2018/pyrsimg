@@ -28,5 +28,3 @@ Toolkit for easy processing of remote sensing image
   oa, producer's, user' accuray, and confusion matrix.
 
 ## to do
-- subset by vector
-- multiple images mosaic.
