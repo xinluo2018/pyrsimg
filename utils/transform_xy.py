@@ -1,4 +1,8 @@
-### ----- author: luo xin, creat: 2021.6.15, modify: 2021.6.23 -----
+### ----- 
+# author: luo xin, 
+# creat: 2021.6.15, modify: 2022.10.6
+# des: image location transform between different coordinate system. 
+# -----
 
 import pyproj
 import numpy as np
@@ -12,13 +16,13 @@ def coor2coor(srs_from, srs_to, x, y):
     return:
         x-coord and y-coord in srs_to 
     """
-    srs_from = pyproj.Proj(int(srs_from))
-    srs_to = pyproj.Proj(int(srs_to))
-    return pyproj.transform(srs_from, srs_to, x, y, always_xy=True)
+    transformer = pyproj.Transformer.from_crs(srs_from, srs_to,always_xy=True)
+    return transformer.transform(x,y)
 
-def geo2imagexy(x, y, gdal_trans):
+def geo2imagexy(x, y, gdal_trans, integer=True):
     '''
     des: from georeferenced location (i.e., lon, lat) to image location(col,row).
+    note: the coordinate system should be same between x/y and gdal_trans.
     input:
         gdal_proj: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()['geotrans']
         x: project or georeferenced x, i.e.,lon
@@ -29,7 +33,8 @@ def geo2imagexy(x, y, gdal_trans):
     a = np.array([[gdal_trans[1], gdal_trans[2]], [gdal_trans[4], gdal_trans[5]]])
     b = np.array([x - gdal_trans[0], y - gdal_trans[3]])
     col_img, row_img = np.linalg.solve(a, b)
-    col_img, row_img = np.floor(col_img).astype('int'), np.floor(row_img).astype('int')
+    if integer:
+        col_img, row_img = np.floor(col_img).astype('int'), np.floor(row_img).astype('int')
     return row_img, col_img
 
 def imagexy2geo(row, col, gdal_trans):
@@ -43,3 +48,4 @@ def imagexy2geo(row, col, gdal_trans):
     x = gdal_trans[0] + col * gdal_trans[1] + row * gdal_trans[2]
     y = gdal_trans[3] + col * gdal_trans[4] + row * gdal_trans[5]
     return x, y
+

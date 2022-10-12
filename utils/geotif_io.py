@@ -1,6 +1,7 @@
 ## author: xin luo 
 # creat: 2021.6.18
 # modify: 2022.1.25
+# des: .tif image reading and written.
 
 import numpy as np
 from osgeo import gdal
