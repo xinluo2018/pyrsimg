@@ -1,6 +1,6 @@
 ### ----- 
 # author: luo xin, 
-# creat: 2022.9.25
+# creat: 2022.9.25, modify: 2023.1.17
 # des: Time formats conversions. year-month-day-hour, day-of-year, decimal year.
 # -----
 
@@ -8,6 +8,7 @@
 '''
 
 import numpy as np
+from astropy.time import Time
 
 def date2doy(year, month, day, hour=0, minute=0):
     '''
@@ -74,3 +75,22 @@ def dt64_to_dyr(dt64):
     days_of_year = (year_next.astype('M8[D]') - year.astype('M8[D]')).astype('timedelta64[D]')
     dt_float = 1970 + year.astype(float) + days / (days_of_year)
     return dt_float
+
+# def gps2dyr(time): ## deprecated
+#     """ Converte from GPS time to decimal years. """
+#     time_gps = Time(time, format="gps")
+#     time_dyr = Time(time_gps, format="decimalyear").value
+#     return time_dyr
+
+### convert time (second format) to decimal year
+def second_to_dyr(time_second, time_start='2000-01-01 00:00:00.0'):
+    ''' this function suitable for the jason data, sentinel-3 data,
+        and the cryosat2 data for time conversion.
+    '''
+    second_start = Time(time_start) ## the start of the second time, some case should be 1970.1.1
+    second_start_gps = Time(second_start, format="gps").value  ## seconds that elapse since gps time.
+    time_start = time_second + second_start_gps    ## seconds between time_start and gps time + seconds between gps time and the given time_second.
+    time_start_gps = Time(time_start, format="gps")
+    time_second_dyr = Time(time_start_gps, format="decimalyear").value
+    return time_second_dyr
+
