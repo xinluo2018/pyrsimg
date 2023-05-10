@@ -15,7 +15,9 @@ Toolkit for easy processing of remote sensing image
 - **raster_vec**    
   raster2vec, vec2mask   
 - **date_format**    
-  date_convert.py   
+  date_convert.py    
+- **image normalization**   
+  img_normalize.py
 
 ## visual   
 - **data**    
@@ -30,6 +32,13 @@ Toolkit for easy processing of remote sensing image
   oa, producer's, user' accuray, and confusion matrix.   
 
 ## tool   
-- get_img_extent, get_utm_zone.   
+- get_img_extent, img_in_extent, crop2extent, get_utm_zone.   
+
 
 ## to do   
+1. compare the imgPatch.py and the crop_scales.py in Tibet-Water-2020.
+2. remove the main function in the python script.
+3. merge the get_img_extent.py and img_in_extent.py into one.
+
+
+
