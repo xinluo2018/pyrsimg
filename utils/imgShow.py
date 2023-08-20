@@ -1,5 +1,5 @@
 ## author: xin luo
-## create: 2020, modify: 2022.1.7
+## create: 2020, modify: 2023.8.18
 ## des: remote sensing image visualization
 
 
@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def imgShow(img, extent=None, color_bands=(2,1,0), \
+def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
                 clip_percent=2, per_band_clip=False, focus_per=None, focus_pix=None):
     '''
     args:
@@ -47,9 +47,11 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
 
     if np.min(img) == np.max(img):
         if len(img.shape) == 2:
-            plt.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
+            if ax: ax.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
+            else: plt.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
         else:
-            plt.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
+            if ax: ax.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
+            else: plt.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
     else:
         if len(img.shape) == 2:
             img_color = np.expand_dims(img, axis=2)
@@ -71,11 +73,13 @@ def imgShow(img, extent=None, color_bands=(2,1,0), \
                 img_color_hist = np.percentile(img_color, [clip_percent, 100-clip_percent])
             img_color_clip = (img_color-img_color_hist[0])\
                                      /(img_color_hist[1]-img_color_hist[0]+0.0001)
-        plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
+
+        if ax: ax.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
+        else: plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
 
 
 def imsShow(img_list, img_name_list, clip_list=None, \
-                            color_bands_list=None, axis=None, row=None, col=None):
+                            color_bands_list=None, axis=True, row=None, col=None):
     ''' des: visualize multiple images.
         input: 
             img_list: containes all images
@@ -83,6 +87,7 @@ def imsShow(img_list, img_name_list, clip_list=None, \
             clip_list: percent clips (histogram) corresponding to the images
             color_bands_list: color bands combination corresponding to the images
             row, col: the row and col of the figure
+            axis: True or False
     '''
     if not clip_list:
         clip_list = [0 for i in range(len(img_list))]
@@ -99,7 +104,7 @@ def imsShow(img_list, img_name_list, clip_list=None, \
                 break
             plt.subplot(row, col, ind+1)
             imgShow(img=img_list[ind], color_bands=color_bands_list[ind], \
-                                                                clip_percent=clip_list[ind])        
+                                                        clip_percent=clip_list[ind])        
             plt.title(img_name_list[ind])
             if not axis:
                 plt.axis('off')

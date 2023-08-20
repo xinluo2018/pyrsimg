@@ -1,12 +1,11 @@
-## author: xin luo
-## create: 2021.11.27; modify: 2023.5.10
-## des: crop one image/multiple tiled images to specific image size. usually used for alignment to 
-##      another image.
+## author: xin luo 
+## creat: 2022.9.30, modify: 2023.8.20
+## des: select images in the given extent.
+## usage: python utils/imgs_in_extent.py -imgs $paths_img -e $left $right $bottom $up
 
-import numpy as np
-import pyproj
-from glob import glob
 import os
+import pyproj
+import numpy as np
 from osgeo import gdal, osr
 
 
@@ -58,7 +57,7 @@ def imgs_in_extent(paths_img, extent):
     lat_in_up = lats_img[0]>extent[3]
     lat_in_down = lats_img[1]<extent[2]
     img_in = lon_in_left or lon_in_right or lat_in_up or lat_in_down    ## for each case, there is no overlap between the image and extent. 
-    if img_in is False:
+    if img_in == False:
       paths_imgs_extent.append(path_img)
   return paths_imgs_extent
 
@@ -67,7 +66,7 @@ def img2extent(path_img, extent, size_target=None, path_save=None):
     '''
     crop image to given extent/size.
     arg:
-        image: the image to be croped; np.array().
+        path_img: string, the image path to be croped.
         extent: extent to which image should be croped;
                 list/tuple,(left, right, down, up). 
         size_target: size to which image should be croped 
@@ -104,8 +103,8 @@ def img2extent(path_img, extent, size_target=None, path_save=None):
         dy = (ymin - ymax) / float(size_target[0])
 
     if path_save is None:
-        drv = gdal.GetDriverByName('MEM')
-        dest = drv.Create('', npix_x, npix_y, nbands, datatype)
+        driver = gdal.GetDriverByName('MEM')
+        dest = driver.Create('', npix_x, npix_y, nbands, datatype)
     else: 
         driver = gdal.GetDriverByName("GTiff")
         dest = driver.Create(path_save, npix_x, npix_y, nbands, datatype)
@@ -132,7 +131,7 @@ def img2extent(path_img, extent, size_target=None, path_save=None):
     else:
         return out_array
 
-def tiles2extent(dir_tiled_data, extent, path_save=None):
+def imgs2extent(paths_img, extent, path_save=None):
     '''
     args:
       dir_data: string, directory of the tiled data
@@ -141,13 +140,14 @@ def tiles2extent(dir_tiled_data, extent, path_save=None):
     return:
         the croped image.
     '''
-    paths_tile = glob(dir_tiled_data+'/*[!albers].tif')
     ### data mosaic
-    paths_tile_sel = imgs_in_extent(paths_img=paths_tile, extent=extent)
-    paths_tile_sel = " ".join(paths_tile_sel)
-    command = "gdal_merge.py -co COMPRESS=LZW -o tiles_mosaic.tif " + paths_tile_sel   ## mosaic
+    paths_img_sel = imgs_in_extent(paths_img=paths_img, extent=extent)
+    paths_img_sel = " ".join(paths_img_sel)
+    command = "gdal_merge.py -co COMPRESS=LZW -o tiles_mosaic.tif " + paths_img_sel   ## mosaic
     print(os.popen(command).read())
     ### data subseting
     img_croped = img2extent(path_img='tiles_mosaic.tif', extent=extent, path_save=path_save)
     os.remove('tiles_mosaic.tif')
     return img_croped
+
+

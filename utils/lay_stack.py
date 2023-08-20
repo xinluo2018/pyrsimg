@@ -1,30 +1,31 @@
 ## author: xin luo 
-## creat: 2022.3.16; modify: 2022.4.4
+## creat: 2022.3.16; modify: 2023.8.19
 ## des: layer stacking for remote sensing images
 
 from osgeo import gdal
-from osgeo import osr
 import numpy as np
 import argparse
 
 def lay_stack(path_imgs, path_out, union=True, res=None):
     '''
     input:
-    path_imgs: list, contains the paths of bands/imgs to be stacked
-    path_out: str, the output path of the layer stacked image
-    union: bool, if true, the output extent is the extents union of input images. 
-            otherwise, the output extent is the extents intersection of input images.
-    res: resolution of the layer stacked image.
-    note: the first image in the path_imgs is the reference image.
+        path_imgs: list, contains the paths of bands/imgs to be stacked
+        path_out: str, the output path of the layer stacked image
+        union: bool, if true, the output extent is the extents union of input images. 
+                otherwise, the output extent is the extents intersection of input images.
+        res: resolution of the layer stacked image.
+    return:
+        imgs_stacked: np.array(), the stacked image.
     '''
 
-    ## base image
+    ## basic information of the stacked image 
     left_min, right_min, bottom_min, up_min = float("inf"), float("inf"), float("inf"), float("inf")
     left_max, right_max, bottom_max, up_max = -float("inf"), -float("inf"), -float("inf"), -float("inf")
     for i, path_img in enumerate(path_imgs):
         img = gdal.Open(path_img, gdal.GA_ReadOnly)
         if i == 0:
-            base_proj = img.GetProjection()
+            base_proj = img.GetProjection() ## the projection of the stacked image is same to the the first image.
+            base_geotrans = img.GetGeoTransform()
         im_geotrans = img.GetGeoTransform()
         im_x = img.RasterXSize  # 
         im_y = img.RasterYSize  # 
@@ -48,46 +49,46 @@ def lay_stack(path_imgs, path_out, union=True, res=None):
     if res is not None:
         dx, dy = res, -res
     else:
-        dx, dy = im_geotrans[1], im_geotrans[5]
-
-    base_x = int(np.round((extent[1] - extent[0]) / float(dx)))  # new col, integer
-    base_y = int(np.round((extent[3] - extent[2]) / float(dy)))  # new row, integer
-    base_dx = (extent[1] - extent[0]) / float(base_x) #update dx and dy, may be a little bias with the original dx and dy.  
-    base_dy = (extent[3] - extent[2]) / float(base_y)
+        dx, dy = base_geotrans[1], base_geotrans[5]
+    ## update the basis information of the stacked image.
+    base_width = int(np.round((extent[1] - extent[0]) / float(dx)))  ## new col, integer
+    base_height = int(np.round((extent[3] - extent[2]) / float(dy)))  ## new row, integer
+    base_dx = (extent[1] - extent[0]) / float(base_width)   ## update dx and dy, may be a little bias with the original dx and dy.  
+    base_dy = (extent[3] - extent[2]) / float(base_height)
     base_geotrans = (extent[0], base_dx, 0.0, extent[2], 0.0, base_dy)
 
-    ## layer stacking 
-    base_n = 0
-    for i_img, path_stack in enumerate(path_imgs):
+    ### One image by one image for layer stacking 
+    ### stacked image initialization.
+    base_n = 0      ### number of bands of the stacked image.
+    for path_img in path_imgs:
         ## image to be layer stacked
-        stack_img = gdal.Open(path_stack)
+        stack_img = gdal.Open(path_img)
         stack_Proj = stack_img.GetProjection()
         stack_n = stack_img.RasterCount
-
-        ## align image to the base image
-        driver= gdal.GetDriverByName('GTiff')
-        stack_align = driver.Create(path_out, base_x, base_y, stack_n, gdal.GDT_Float32)
-        stack_align.SetGeoTransform(base_geotrans)
-        stack_align.SetProjection(base_proj)
-        gdal.ReprojectImage(stack_img, stack_align, stack_Proj, base_proj, gdal.GRA_Bilinear)
-
-        ## layer stacking
-        n_bands = base_n+stack_n
-        img_stack = driver.Create(path_out, base_x, base_y, n_bands, gdal.GDT_Float32)
-
-        if(img_stack!= None):
-            img_stack.SetGeoTransform(base_geotrans)       # 
-            img_stack.SetProjection(base_proj)      # 
-
+        ## align stack image to the base image
+        driver = gdal.GetDriverByName('GTiff')
+        stack_img_align = driver.Create(path_out, base_width, base_height, stack_n, gdal.GDT_Float32)
+        stack_img_align.SetGeoTransform(base_geotrans)
+        stack_img_align.SetProjection(base_proj)
+        gdal.ReprojectImage(stack_img, stack_img_align, stack_Proj, base_proj, gdal.GRA_Bilinear)
+        ## Layer stacking (update the stacked image )
+        n_bands = base_n+stack_n   ## Update the number of bands of the base image
+        imgs_stacked = driver.Create(path_out, base_width, base_height, n_bands, gdal.GDT_Float32) ## update the output stacked image
+        if(imgs_stacked != None):
+            imgs_stacked.SetGeoTransform(base_geotrans)     # 
+            imgs_stacked.SetProjection(base_proj)           #         
+        ### update the bands of the base image.
         for i_band in range(base_n):
-            img_stack.GetRasterBand(i_band+1).WriteArray(base_img.GetRasterBand(i_band+1).ReadAsArray())
+            imgs_stacked.GetRasterBand(i_band+1).WriteArray(base_img.GetRasterBand(i_band+1).ReadAsArray())
+        ### write the stack image and obtained the new stacked image (base image + stack image).
         for i_band in range(stack_n):
-            img_stack.GetRasterBand(base_n+i_band+1).WriteArray(stack_align.GetRasterBand(i_band+1).ReadAsArray())
-        ## update base image
+            imgs_stacked.GetRasterBand(base_n+i_band+1).WriteArray(stack_img_align.GetRasterBand(i_band+1).ReadAsArray())
+        ## Update base image, i.e., the new stacked image.
         base_n = n_bands
-        base_img = img_stack
+        base_img = imgs_stacked
     print('Images layer stacking done.')
-    del img_stack, base_img, stack_img 
+    del base_img, stack_img 
+    return imgs_stacked.ReadAsArray().transpose((1,2,0))
 
 
 def get_args():
@@ -120,5 +121,5 @@ if __name__ == '__main__':
     path_out = args.path_out[0]
     union = args.union
     res = args.resolution[0]
-    lay_stack(path_imgs, path_out, union, res)
+    _ = lay_stack(path_imgs, path_out, union, res)
 

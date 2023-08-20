@@ -1,14 +1,14 @@
 ## author: xin luo 
-# creat: 2021.6.18
-# modify: 2022.1.25
+# creat: 2021.6.18; modify: 2023.8.18
 # des: .tif image reading and written.
+
 
 import numpy as np
 from osgeo import gdal
 from osgeo import osr
 
 ### tiff image reading
-def readTiff(path_in):
+class readTiff():
     '''
     arg:
         path_in: image path
@@ -16,29 +16,27 @@ def readTiff(path_in):
         img: numpy array, exent: tuple, (x_min, x_max, y_min, y_max) 
         proj info, and dimentions: (row, col, band)
     '''
-    RS_Data=gdal.Open(path_in)
-    im_col = RS_Data.RasterXSize  # 
-    im_row = RS_Data.RasterYSize  # 
-    im_bands =RS_Data.RasterCount  # 
-    im_geotrans = RS_Data.GetGeoTransform()  # 
-    im_proj = RS_Data.GetProjection()  # 
-    img_array = RS_Data.ReadAsArray(0, 0, im_col, im_row).astype(np.float)  # 
-    left = im_geotrans[0]
-    up = im_geotrans[3]
-    right = left + im_geotrans[1] * im_col + im_geotrans[2] * im_row
-    bottom = up + im_geotrans[5] * im_row + im_geotrans[4] * im_col
-    extent = (left, right, bottom, up)
-    espg_code = osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1)
+    def __init__(self, path_in):
+        RS_Data=gdal.Open(path_in)
+        self.geotrans = RS_Data.GetGeoTransform()  # 
+        self.row = RS_Data.RasterYSize
+        self.col = RS_Data.RasterXSize  # 
+        self.bands = RS_Data.RasterCount 
+        im_proj = RS_Data.GetProjection()
+        self.espg_code = osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1)        
+        self.array = RS_Data.ReadAsArray(0, 0, self.col, self.row).astype(float)
+        if self.bands > 1:
+            self.array = np.transpose(self.array, (1, 2, 0)) # 
+    @property
+    def geoextent(self):
+        left = self.geotrans[0]
+        up = self.geotrans[3]
+        right = left + self.geotrans[1] * self.col + self.geotrans[2] * self.row
+        bottom = up + self.geotrans[5] * self.row + self.geotrans[4] * self.col
+        extent = (left, right, bottom, up)
+        return extent
 
-    img_info = {'geoextent': extent, 'geotrans':im_geotrans, \
-                'geosrs': espg_code, 'row': im_row, 'col': im_col,\
-                    'bands': im_bands}
 
-    if im_bands > 1:
-        img_array = np.transpose(img_array, (1, 2, 0)) # 
-        return img_array, img_info 
-    else:
-        return img_array, img_info
 
 ###  .tiff image write
 def writeTiff(im_data, im_geotrans, im_geosrs, path_out):

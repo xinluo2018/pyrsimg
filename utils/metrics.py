@@ -6,51 +6,17 @@ import torch
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-## ------------------------------ ##
-## -- batch-based; torch-based -- ##
-## ------------------------------ ##
-def oa_binary(pred, truth):
-    ''' des: calculate overall accuracy (2-class classification) for each batch
-        input: 
-            pred(4D tensor), and truth(4D tensor)
-    '''
-    pred_bi = torch.where(pred>0.5, 1., 0.)   # [N,C,H,W]
-    inter = pred_bi+truth
-    area_inter = torch.histc(inter.float(), bins=3, min=0, max=2)
-    area_inter = area_inter[0:3:2]
-    area_pred = torch.histc(pred, bins=2, min=0, max=1)
-    oa = area_inter/(area_pred+0.0000001)
-    oa = oa.mean()
-    return oa
 
-def miou_binary(pred, truth):
-    ''' des: calculate miou (2-class classification) for each batch
-        input: 
-            pred(4D tensor), and truth(4D tensor)
-    '''
-    pred_bi = torch.where(pred>0.5, 1., 0.)   # [N,C,H,W]
-    inter = pred_bi+truth
-    area_inter = torch.histc(inter.float(), bins=3, min=0, max=2)
-    area_inter = area_inter[0:3:2]
-    area_pred = torch.histc(pred, bins=2, min=0, max=1)
-    area_truth = torch.histc(truth.float(), bins=2, min=0, max=1)
-    area_union = area_pred + area_truth - area_inter
-    iou = area_inter/(area_union+0.0000001)
-    miou = iou.mean()
-    return miou
-
-
-
-## ------------------------------ ##
-## --------- image-based -------- ##
-## ------------------------------ ##
-def acc_matrix(cla_map,  sam_pixel=None, truth_map=None, id_label=None):
+## --------- conventional image-based -------- ##
+## usually used for accuracy assessment of image classificaiton 
+def acc_matrix(cla_map, truth_map=None, sam_pixel=None, id_label=None):
     ''' 
-    Arguments: 
-        cla_map: classification result of the full image
-        truth_map: truth image (either truth_map or sam_pixel should be given)
-        sam_pixel: array(num_samples,3), col 1,2,3 are the row,col and label.            
-        id_label: 0,1,2..., the target class for calculating producer's or user's accuracy.
+    args: 
+        cla_map: classification result of the full image.
+        truth_map: truth image (either truth_map or sam_pixel should be given).
+        sam_pixel: np.array, (num_samples,3), col 1,2,3 are the row,col and label.            
+        id_label: 0/1/2/..., Calculating producer's or user's accuracy for target class.
+    Note: Either one of the truth_map and sam_pixel should be determination. 
     Return: 
         the overall accuracy and confusion matrix
     '''
@@ -95,3 +61,40 @@ def acc_miou(cla_map, truth_map, labels=None):
         iou_score = np.sum(intersection)/np.sum(union)
         iou.append(iou_score)
     return np.mean(iou)
+
+
+## -- 4D batch-based; torch-based -- ##
+## Usually used for the model traing and validation
+def oa_binary(pred, truth):
+    ''' 
+    des: calculate overall accuracy (2-class classification) for each batch
+    input: 
+        pred: 4D tensor 
+        truth: 4D tensor
+    '''
+    pred_bi = torch.where(pred>0.5, 1., 0.)   # [N,C,H,W]
+    inter = pred_bi+truth
+    area_inter = torch.histc(inter.float(), bins=3, min=0, max=2)
+    area_inter = area_inter[0:3:2]
+    area_pred = torch.histc(pred, bins=2, min=0, max=1)
+    oa = area_inter/(area_pred+0.0000001)
+    oa = oa.mean()
+    return oa
+
+def miou_binary(pred, truth):
+    ''' des: calculate miou (2-class classification) for each batch
+        input: 
+            pred(4D tensor), and truth(4D tensor)
+    '''
+    pred_bi = torch.where(pred>0.5, 1., 0.)   # [N,C,H,W]
+    inter = pred_bi+truth
+    area_inter = torch.histc(inter.float(), bins=3, min=0, max=2)
+    area_inter = area_inter[0:3:2]
+    area_pred = torch.histc(pred, bins=2, min=0, max=1)
+    area_truth = torch.histc(truth.float(), bins=2, min=0, max=1)
+    area_union = area_pred + area_truth - area_inter
+    iou = area_inter/(area_union+0.0000001)
+    miou = iou.mean()
+    return miou
+
+
