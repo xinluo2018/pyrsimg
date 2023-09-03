@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: pyrsimg
+Version: 1.0.1
+Summary: Python toolkit for easy processing of remote sensing image
+Author: The rsipy developers
+Author-email: xinluo_xin@163.com
+Maintainer: Xin Luo
+Maintainer-email: xinluo_xin@163.com
+License: GPL License
+Requires-Python: >=3.6
+License-File: LICENSE

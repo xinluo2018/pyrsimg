@@ -1,5 +1,9 @@
-# **rsipy**  
+# **pyrsimg**  
 Toolkit for easy processing of remote sensing image, particularly the processing related to the applicaiton of deep learning method is considered.   
+
+## **Installation**
+pip install pyrsimg
+
 
 
 ## dataio  
@@ -16,6 +20,7 @@ Toolkit for easy processing of remote sensing image, particularly the processing
 - **image transform**     
   lay_stack   
 
+
 ## transform  
 - **geo_imgxy**      
   get_utm_zone, coor2coor, geo2imagexy, imagexy2geo     
@@ -29,7 +34,6 @@ Toolkit for easy processing of remote sensing image, particularly the processing
   imgShow, imsShow   
 - **metric_plot**   
 
-
 ## metrics  
 - **metrics**      
   acc_matrix, acc_miou, oa_binary, miou_binary
@@ -37,6 +41,9 @@ Toolkit for easy processing of remote sensing image, particularly the processing
   smooth
 
 ## To do   
+Modify the script raster_vec.py, remove the rasterio, and use gdal instead, ref: https://hydro-informatics.com/jupyter/geo-convert.html  
+
+
 
 
 
