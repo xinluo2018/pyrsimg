@@ -10,5 +10,3 @@ from pyrsimg.metrics import *
 from pyrsimg.rsimg_io import *
 from pyrsimg.transform_time import *
 
-
-

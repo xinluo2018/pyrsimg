@@ -9,6 +9,7 @@ from setuptools import find_packages
 
 VERSION = '1.0.8'
 
+
 setup(
     name='pyrsimg',   # package name
     version=VERSION,  # package version
@@ -17,11 +18,10 @@ setup(
     author_email='xinluo_xin@163.com',
     maintainer='Xin Luo',
     maintainer_email='xinluo_xin@163.com',    
-
-    license='GPL License',
-    packages=find_packages(),
-    install_requires=['pyproj', 
-                      'torch', 
+    license='GPL License',  
+    packages=find_packages(),  
+    install_requires=['pyproj',   
+                      'torch',  
                       'scikit-learn', 
                       'numpy', 
                       'opencv-python', 
