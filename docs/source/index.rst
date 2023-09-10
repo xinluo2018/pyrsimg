@@ -18,6 +18,5 @@ Indices and table
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-aaa
 
 
