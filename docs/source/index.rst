@@ -12,9 +12,12 @@ Welcome to pyrsimg's documentation!
 
 
 
-Indices and tables
+Indices and table
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+aaa
+
+
