@@ -5,18 +5,28 @@
 
 Welcome to pyrsimg's documentation!
 ===================================
+Toolkit for easy processing of remote sensing image
+
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Getting Started 
 
+   getting_started/origin_purpose 
+   getting_started/install
 
+.. toctree::  
+   :maxdepth: 3
+   :caption: API Reference
 
-Indices and tables
-==================
+   api_reference/api_reference
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Examples:
+
+   examples/img_patch_convert
+   examples/read_and_show
 
 

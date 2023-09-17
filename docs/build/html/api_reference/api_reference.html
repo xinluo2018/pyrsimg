@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; pyrsimg 1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Convert image to patches." href="../examples/img_patch_convert.html" />
+    <link rel="prev" title="Installation" href="../getting_started/install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pyrsimg
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/origin_purpose.html">Origin and Purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rsimg-io">rsimg_io</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#readTiff"><code class="docutils literal notranslate"><span class="pre">readTiff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writeTiff"><code class="docutils literal notranslate"><span class="pre">writeTiff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#geo-imgxy">geo_imgxy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get_utm_zone"><code class="docutils literal notranslate"><span class="pre">get_utm_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coor2coor"><code class="docutils literal notranslate"><span class="pre">coor2coor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo2imagexy"><code class="docutils literal notranslate"><span class="pre">geo2imagexy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imagexy2geo"><code class="docutils literal notranslate"><span class="pre">imagexy2geo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#img-extent">img_extent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get_img_extent"><code class="docutils literal notranslate"><span class="pre">get_img_extent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imgs_in_extent"><code class="docutils literal notranslate"><span class="pre">imgs_in_extent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#img2extent"><code class="docutils literal notranslate"><span class="pre">img2extent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imgs2extent"><code class="docutils literal notranslate"><span class="pre">imgs2extent()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#img-normalize">img_normalize</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#img_normalize"><code class="docutils literal notranslate"><span class="pre">img_normalize</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#img2patch-class">img2patch (class)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#img2patch"><code class="docutils literal notranslate"><span class="pre">img2patch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crop"><code class="docutils literal notranslate"><span class="pre">crop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crop_scales"><code class="docutils literal notranslate"><span class="pre">crop_scales()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#imgshow">imgShow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#imgShow"><code class="docutils literal notranslate"><span class="pre">imgShow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imsShow"><code class="docutils literal notranslate"><span class="pre">imsShow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lay-stack">lay_stack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lay_stack"><code class="docutils literal notranslate"><span class="pre">lay_stack()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metric-proc">metric_proc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smooth"><code class="docutils literal notranslate"><span class="pre">smooth()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metric">metric</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#acc_matrix"><code class="docutils literal notranslate"><span class="pre">acc_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acc_miou"><code class="docutils literal notranslate"><span class="pre">acc_miou()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oa_binary"><code class="docutils literal notranslate"><span class="pre">oa_binary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#miou_binary"><code class="docutils literal notranslate"><span class="pre">miou_binary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#raster-vec">raster_vec</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raster2vec"><code class="docutils literal notranslate"><span class="pre">raster2vec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vec2mask"><code class="docutils literal notranslate"><span class="pre">vec2mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transform-time">transform_time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#date2doy"><code class="docutils literal notranslate"><span class="pre">date2doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doy2date"><code class="docutils literal notranslate"><span class="pre">doy2date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dt64_to_dyr"><code class="docutils literal notranslate"><span class="pre">dt64_to_dyr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#second_to_dyr"><code class="docutils literal notranslate"><span class="pre">second_to_dyr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/img_patch_convert.html">Convert image to patches.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/read_and_show.html">Read and show</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyrsimg</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_reference/api_reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+<section id="rsimg-io">
+<h2>rsimg_io<a class="headerlink" href="#rsimg-io" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>readTiff (class):</p></li>
+<li><p>writeTiff: write out the .tiff formated remote sensing image.</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="readTiff">
+<span class="sig-name descname"><span class="pre">readTiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#readTiff" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Write out the .tiff formated remote sensing image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path_in</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>img(np.array), extent(tuple), projection(str), dimentions(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="writeTiff">
+<span class="sig-name descname"><span class="pre">writeTiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">im_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_geotrans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">im_geosrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#writeTiff" title="Permalink to this definition"></a></dt>
+<dd><p>Write out the .tiff formated remote sensing image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>im_data, im_geotrans, im_geosrs, path_out</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="geo-imgxy">
+<h2>geo_imgxy<a class="headerlink" href="#geo-imgxy" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="get_utm_zone">
+<span class="sig-name descname"><span class="pre">get_utm_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_utm_zone" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Get utm zone from the given wgs84 coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lon: the given longitute, should be in the range of [-180, 180]</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>utm_zone_number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="coor2coor">
+<span class="sig-name descname"><span class="pre">coor2coor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srs_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srs_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coor2coor" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Transform coordinates from srs_from to srs_to</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>srs_from:  EPSG number (e.g., 4326, 3031)</p>
+<p>srs_to: EPSG number (e.g., 4326, 3031)</p>
+<p>x: x-coord corresponding to srs_from</p>
+<p>y: corresponding to srs_to</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>utm_zone_number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geo2imagexy">
+<span class="sig-name descname"><span class="pre">geo2imagexy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdal_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geo2imagexy" title="Permalink to this definition"></a></dt>
+<dd><p>Description: from georeferenced location (i.e., lon, lat) to image location(col,row).</p>
+<p>Note: the coordinate system should be same between x/y and gdal_trans.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gdal_proj: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()[‘geotrans’]</p>
+<p>x: project or georeferenced x, i.e.,lon</p>
+<p>y: project or georeferenced y, i.e., lat</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>utm_zone_number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imagexy2geo">
+<span class="sig-name descname"><span class="pre">imagexy2geo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdal_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagexy2geo" title="Permalink to this definition"></a></dt>
+<dd><p>Description: from image location(col,row) to georeferenced location (i.e., lon, lat).</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img_gdal: GDAL data (read by gdal.Open()</p>
+<p>row: row of the input image (dataset)</p>
+<p>col: col of the input image (dataset)</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>x: geographical coordinates at x-axis (left up of pixel)</p>
+<p>y: geographical coordinates at y-axis (left up of pixel)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="img-extent">
+<h2>img_extent<a class="headerlink" href="#img-extent" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="get_img_extent">
+<span class="sig-name descname"><span class="pre">get_img_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_img_extent" title="Permalink to this definition"></a></dt>
+<dd><p>Description: obtain the image extent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path_img: path of the remote sensing image.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>extent: image extent. list -&gt; [left, right, bottom, up]
+espg_code: ESPG code</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imgs_in_extent">
+<span class="sig-name descname"><span class="pre">imgs_in_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgs_in_extent" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Selected imgs that in the given extent.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>paths_img: list, images paths</p>
+<p>extent: image extent. list -&gt; [left, right, bottom, up]</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>paths_imgs_extent, list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="img2extent">
+<span class="sig-name descname"><span class="pre">img2extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img2extent" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Crop image to given extent/size.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path_img: string, the image path to be croped.</p>
+<p>extent: extent to which image should be croped; list/tuple,(left, right, down, up).</p>
+<p>size_target: size to which image should be croped list/tuple, (row, col)</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>img_croped: the croped image, np.array()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imgs2extent">
+<span class="sig-name descname"><span class="pre">imgs2extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths_img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgs2extent" title="Permalink to this definition"></a></dt>
+<dd><p>Description: crop multiple images to the given extent.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dir_data: string, directory of the tiled data</p>
+<p>extent: list, [left, right, bottom, up], can be obtained by readTiff() function.</p>
+<p>path_save: string, the file path to be saved.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>img_croped: the croped image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="img-normalize">
+<h2>img_normalize<a class="headerlink" href="#img-normalize" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="img_normalize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_bands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bands)(image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img_normalize" title="Permalink to this definition"></a></dt>
+<dd><p>Description: image normalization.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>max_bands: list, max value of each the band of image.</p>
+<p>min_bands: list, min values of each the band of image.</p>
+<p>image: np.array.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>image_nor: the normalized image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="img2patch-class">
+<h2>img2patch (class)<a class="headerlink" href="#img2patch-class" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="img2patch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img2patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_overlay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img2patch" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Conversion between the remote sensing image and patches</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img: np.array()</p>
+<p>patch_size: size of the patch</p>
+<p>edge_overlay: an even number, single-side overlay of the neighboring images.</p>
+</dd>
+<dt class="field-even">Method<span class="colon">:</span></dt>
+<dd class="field-even"><p>.toPatch():</p>
+<p>Description: convert img to patches.</p>
+<dl class="field-list">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>patch_list: contains all generated patches.</p>
+<p>start_list: contains all start positions(row, col) of the generated patches.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Method<span class="colon">:</span></dt>
+<dd class="field-odd"><p>.higher_patch_crop(higher_patch_size)</p>
+<p>Description: crop the higher-scale patch</p>
+<dl class="field-list simple">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>higher_patch_size: int, the lager patch size compared the low-scale patch size.</p>
+</dd>
+<dt class="field-even">retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>higher_patch_list: list, contains higher-scale patches corresponding to the lower-scale patches.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Method<span class="colon">:</span></dt>
+<dd class="field-even"><p>.toImage(patch_list)</p>
+<p>Description: merge patches into one image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>patch_list: list of the all patches.</p>
+</dd>
+<dt class="field-even">retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>img_array: the merged image by patches</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crop">
+<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop" title="Permalink to this definition"></a></dt>
+<dd><p>Description: randomly crop corresponding to specific size.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img: np.array(), (height, width, channels), the remote senisng image.</p>
+<p>size: tuble/list, (height, width)</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>patch, the cropped patch from the image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crop_scales">
+<span class="sig-name descname"><span class="pre">crop_scales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(2048,</span> <span class="pre">512,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop_scales" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Randomly crop multiple-scale pari-wise patches and truths (from high to low) from remote sensing image and truth image.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img: np.array(), (height, width, channels), the remote senisng image.</p>
+<p>scales: tuple or list (high scale -&gt; low scale)</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>patches_group_down: list of multiscale patches.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="imgshow">
+<h2>imgShow<a class="headerlink" href="#imgshow" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="imgShow">
+<span class="sig-name descname"><span class="pre">imgShow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(2,</span> <span class="pre">1,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_band_clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_per</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_pix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgShow" title="Permalink to this definition"></a></dt>
+<dd><p>Description: show the single image.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img: (row, col, band) or (row, col), DN range should be in [0,1]</p>
+<p>extent: list, the coordinates of the extent.</p>
+<p>num_bands: a list/tuple, [red_band,green_band,blue_band]</p>
+<p>clip_percent: for linear strech, value within the range of 0-100.</p>
+<p>per_band_clip: if True, the band values will be clipped by each band respectively.</p>
+<p>focus_per: list, [up_start_percent,down_end_percent,left_start_percent, right_end_percent]; 0 &lt; value &lt; 1</p>
+<p>focus_pix: list, [up_start_pixel,down_end_pixel,left_start_pixel, right_end_pixel]; 0 &lt; value &lt; (width or height) of the image</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="imsShow">
+<span class="sig-name descname"><span class="pre">imsShow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_name_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_bands_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imsShow" title="Permalink to this definition"></a></dt>
+<dd><p>Description: show the multiple images.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>img_list: containes all images</p>
+<p>img_names_list: image names corresponding to the images</p>
+<p>clip_list: percent clips (histogram) corresponding to the images</p>
+<p>color_bands_list: color bands combination corresponding to the images</p>
+<p>row, col: the row and col of the figure</p>
+<p>axis: True or False</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="lay-stack">
+<h2>lay_stack<a class="headerlink" href="#lay-stack" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lay_stack">
+<span class="sig-name descname"><span class="pre">lay_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_imgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">union</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lay_stack" title="Permalink to this definition"></a></dt>
+<dd><p>Description: layer stacking of the multiple bands of image.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path_imgs: list, contains the paths of bands/imgs to be stacked</p>
+<p>path_out: str, the output path of the layer stacked image</p>
+<p>union: bool, if true, the output extent is the extents union of input images. Otherwise, the output extent is the extents intersection of input images.</p>
+<p>res: resolution of the layer stacked image.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>imgs_stacked: np.array(), the stacked image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="metric-proc">
+<h2>metric_proc<a class="headerlink" href="#metric-proc" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smooth" title="Permalink to this definition"></a></dt>
+<dd><p>Description: smooth the sequential data.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>y: the sequential data.</p>
+<p>window: the smooth window used for averating y.</p>
+<p>num_sam: the number of sampled data.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>x: the smoothed sequential data of x-axis.</p>
+<p>y: the smoothed sequential data of y-axis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="metric">
+<h2>metric<a class="headerlink" href="#metric" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acc_matrix">
+<span class="sig-name descname"><span class="pre">acc_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cla_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sam_pixel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acc_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Description: calculate the accuracy matrix.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cla_map: classification result of the full image.</p>
+<p>truth_map: truth image (either truth_map or sam_pixel should be given).</p>
+<p>sam_pixel: np.array, (num_samples,3), col 1,2,3 are the row,col and label.</p>
+<p>id_label: 0/1/2/…, Calculating producer’s or user’s accuracy for target class.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>acc_oa: overall accuracy</p>
+<p>confus_mat: confusion matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acc_miou">
+<span class="sig-name descname"><span class="pre">acc_miou</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cla_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acc_miou" title="Permalink to this definition"></a></dt>
+<dd><p>Description: calculate the miou metric.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cla_map: classification result of the full image</p>
+<p>truth_map: truth image (either truth_map or sam_pixel should be given)</p>
+<p>labels: a list, the class id for calculating. e.g., [0,1,2]</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>miou: MIoU metric</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="oa_binary">
+<span class="sig-name descname"><span class="pre">oa_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oa_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Description: calculate overall accuracy (2-class classification) for each batch.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pred: 4D tensor</p>
+<p>truth: 4D tensor</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>oa: overall accuracy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miou_binary">
+<span class="sig-name descname"><span class="pre">miou_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#miou_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Description: calculate miou (2-class classification) for each batch.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pred: 4D tensor</p>
+<p>truth: 4D tensor</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>miou: miou metric</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="raster-vec">
+<h2>raster_vec<a class="headerlink" href="#raster-vec" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="raster2vec">
+<span class="sig-name descname"><span class="pre">raster2vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn_values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raster2vec" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Read input band with Rasterio.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>raster_path: raster path</p>
+<p>output_path: ouput vector path</p>
+<p>dn_values: list, consist of the raster value to be vectorization</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>miou: miou metric</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vec2mask">
+<span class="sig-name descname"><span class="pre">vec2mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vec2mask" title="Permalink to this definition"></a></dt>
+<dd><p>Description: generate/save mask file using the vector file(e.g.,.shp,.gpkg).</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>path_vec: str, path of the vector data.</p>
+<p>path_raster: str, path of the raster data.</p>
+<p>path_save: str, path to save.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>mask: np.array().</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="transform-time">
+<h2>transform_time<a class="headerlink" href="#transform-time" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="date2doy">
+<span class="sig-name descname"><span class="pre">date2doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#date2doy" title="Permalink to this definition"></a></dt>
+<dd><p>Description: convert year-month-day-hour-minute to doy (day-of-year)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>year
+month: 0~12
+day: 0~31
+hour
+minute</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>doy: day of the year.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="doy2date">
+<span class="sig-name descname"><span class="pre">doy2date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#doy2date" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Convert doy(day-of-year) to year-month-day-hour-minute formate the function returns the month and the day of the month.</p>
+<dl class="field-list">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>year</p>
+<p>doy</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>month</p>
+<p>day: the day of the month</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dt64_to_dyr">
+<span class="sig-name descname"><span class="pre">dt64_to_dyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt64</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dt64_to_dyr" title="Permalink to this definition"></a></dt>
+<dd><p>Description: Convert datetime64 to decimal year format. e.g., ‘2020-05-23T03:25:22.959373696’ -&gt; 2020.3907103825136.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dt64: np.datetime64 format time</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>dt_float: float, the decimal date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="second_to_dyr">
+<span class="sig-name descname"><span class="pre">second_to_dyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_second</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2000-01-01</span> <span class="pre">00:00:00.0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#second_to_dyr" title="Permalink to this definition"></a></dt>
+<dd><p>Description: convert time (second format) to decimal year. This function suitable for the jason data, sentinel-3 data, and the cryosat2 data for time conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>time_second: seconds from the time start.</p>
+</dd>
+<dt class="field-even">Retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p>time_second_dyr: decimal date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../getting_started/install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../examples/img_patch_convert.html" class="btn btn-neutral float-right" title="Convert image to patches." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Xin Luo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
