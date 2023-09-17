@@ -10,8 +10,13 @@ import random
 
 class img2patch():
     def __init__(self, img, patch_size, edge_overlay):
-        ''' edge_overlay = left overlay or, right overlay
-        edge_overlay should be an even number. '''
+        '''  
+        args:
+            img: np.array()
+            patch_size: size of the patch
+            edge_overlay: an even number, single-side overlay of the neighboring images.
+        '''
+
         if edge_overlay % 2 != 0:
             raise ValueError('Argument edge_overlay should be an even number')
         self.edge_overlay = edge_overlay        
@@ -72,6 +77,10 @@ class img2patch():
         des: 
             merge patches into one image. 
             (!!note: the toPatch() usually should be firstly called when use toImage())
+        args:
+            patch_list: list of the all patches.
+        return: 
+            img_array: the merged image by patches 
         '''
         patch_list = [patch[self.edge_overlay//2:-self.edge_overlay//2, self.edge_overlay//2:-self.edge_overlay//2,:]
                                                         for patch in patch_list]
@@ -85,11 +94,11 @@ class img2patch():
 
 def crop(image, size=(256, 256), channel_first=False):
     ''' 
+      des: randomly crop corresponding to specific size
       input:
         img: np.array(), (height, width, channels), the remote senisng image.
-        turth: np.array(), the groud truth of the image.
         size: tuble/list, (height, width)
-      des: randomly crop corresponding to specific size
+      return: patch, the cropped patch from the image.
     '''
     if channel_first:
       image = np.transpose(image, (1,2,0))    
@@ -103,12 +112,12 @@ def crop(image, size=(256, 256), channel_first=False):
 
 def crop_scales(image, scales=(2048, 512, 256), channel_first=False):
     ''' 
-      input:
-        img: np.array(), (height, width, channels), the remote senisng image.
-        turth: np.array(), the groud truth of the image.
-        scales: tuple or list (high scale -> low scale)
-      des: randomly crop multiple-scale pari-wise patches and truths (from high to low) 
+    des: randomly crop multiple-scale pari-wise patches and truths (from high to low) 
             from remote sensing image and truth image.
+    input:
+        img: np.array(), (height, width, channels), the remote senisng image.
+        scales: tuple or list (high scale -> low scale)
+    return: patches_group_down: list of multiscale patches.
     '''
     if channel_first:
       image = np.transpose(image, (1,2,0))

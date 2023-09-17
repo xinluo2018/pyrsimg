@@ -22,6 +22,14 @@ def coor2coor(srs_from, srs_to, x, y):
     return transformer.transform(x,y)
 
 def get_img_extent(path_img):
+      '''
+      des: obtain the image extent.
+      arg: 
+        path_img: path of the remote sensing image.
+      return: 
+        extent: image extent. list -> [left, right, bottom, up]
+        espg_code: ESPG code
+      '''
       RS_Data=gdal.Open(path_img)
       im_col = RS_Data.RasterXSize  # 
       im_row = RS_Data.RasterYSize  # 
@@ -38,9 +46,11 @@ def get_img_extent(path_img):
 def imgs_in_extent(paths_img, extent):
   '''
   des: selected imgs that in the given extent.
-  arg:
+  args:
     paths_img: list, images paths;
     extent: the given extent(wgs84). list -> [left, right, bottom, up]
+  retrun:
+    paths_imgs_extent
   '''
   paths_imgs_extent = []
   for path_img in paths_img:
@@ -133,6 +143,7 @@ def img2extent(path_img, extent, size_target=None, path_save=None):
 
 def imgs2extent(paths_img, extent, path_save=None):
     '''
+    des: crop multiple images to the given extent.
     args:
       dir_data: string, directory of the tiled data
       extent: list, [left, right, bottom, up], can be obtained by readTiff() function.

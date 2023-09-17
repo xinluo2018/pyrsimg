@@ -1,6 +1,6 @@
 ## author: xin luo 
-# creat: 2021.6.18; modify: 2023.8.18
-# des: .tif image reading and written.
+## creat: 2021.6.18; modify: 2023.8.18
+## des: .tif image reading and written.
 
 
 import numpy as np
@@ -13,8 +13,10 @@ class readTiff():
     arg:
         path_in: image path
     return: 
-        img: numpy array, exent: tuple, (x_min, x_max, y_min, y_max) 
-        proj info, and dimentions: (row, col, band)
+        img: numpy array, 
+        exent: tuple, (x_min, x_max, y_min, y_max) 
+        projection:
+        dimentions: (row, col, band)
     '''
     def __init__(self, path_in):
         RS_Data=gdal.Open(path_in)

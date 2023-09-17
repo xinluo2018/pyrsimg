@@ -8,6 +8,7 @@ import argparse
 
 def lay_stack(path_imgs, path_out, union=True, res=None):
     '''
+    des: layer stacking of the multiple bands of image.
     input:
         path_imgs: list, contains the paths of bands/imgs to be stacked
         path_out: str, the output path of the layer stacked image

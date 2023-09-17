@@ -7,6 +7,7 @@ from scipy.interpolate import make_interp_spline
 
 def smooth(y, window=31, num_sam = None):
     '''
+    des: smooth the sequential data.
     input:
       y: the sequential data.
       window: the smooth window used for averating y.

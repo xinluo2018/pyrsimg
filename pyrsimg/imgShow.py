@@ -10,6 +10,7 @@ import numpy as np
 def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
                 clip_percent=2, per_band_clip=False, focus_per=None, focus_pix=None):
     '''
+    Description: show the single image.
     args:
         img: (row, col, band) or (row, col), DN range should be in [0,1]
         extent: list, the coordinates of the extent. 
@@ -20,6 +21,7 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
                     left_start_percent, right_end_percent]; 0 < value < 1
         focus_pix: list, [up_start_pixel,down_end_pixel, \
                     left_start_pixel, right_end_pixel]; 0 < value < (width or height) of the image
+    return: None
     '''
     img = img.copy()
     img[np.isnan(img)]=0
@@ -88,6 +90,7 @@ def imsShow(img_list, img_name_list, clip_list=None, \
             color_bands_list: color bands combination corresponding to the images
             row, col: the row and col of the figure
             axis: True or False
+        return: None
     '''
     if not clip_list:
         clip_list = [0 for i in range(len(img_list))]

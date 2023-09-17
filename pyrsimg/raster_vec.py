@@ -44,10 +44,11 @@ def vec2mask(path_vec, path_raster, path_save=None):
     des: generate/save mask file using the vector file(e.g.,.shp,.gpkg).
     author: jinhua zhang, create: 2021.3.13, modify by luo: 2021.11.27
     input: 
-        path_vec, path_raster, path_save: str
+        path_vec: str, path of the vector data.
+        path_raster: str, path of the raster data.
+        path_save: str, path to save.
     retrun: 
-        mask, np.array.
-        a .tiff file written to the given path
+        mask, np.array. and a .tiff file written to the given path.
     """
     raster, vec = gdal.Open(path_raster, gdal.GA_ReadOnly), ogr.Open(path_vec)
     x_res = raster.RasterXSize

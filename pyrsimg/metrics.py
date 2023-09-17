@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 ## usually used for accuracy assessment of image classificaiton 
 def acc_matrix(cla_map, truth_map=None, sam_pixel=None, id_label=None):
     ''' 
+    des: calculate the accuracy matrix
     args: 
         cla_map: classification result of the full image.
         truth_map: truth image (either truth_map or sam_pixel should be given).
@@ -18,7 +19,7 @@ def acc_matrix(cla_map, truth_map=None, sam_pixel=None, id_label=None):
         id_label: 0/1/2/..., Calculating producer's or user's accuracy for target class.
     Note: Either one of the truth_map and sam_pixel should be determination. 
     Return: 
-        the overall accuracy and confusion matrix
+        acc_oa, confus_mat: the overall accuracy and confusion matrix
     '''
     if sam_pixel is not None:
         sam_result = []

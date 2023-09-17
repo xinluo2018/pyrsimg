@@ -45,7 +45,11 @@ or:
   smooth
 
 ## To do   
-Modify the script raster_vec.py, remove the rasterio, and use gdal instead, ref: https://hydro-informatics.com/jupyter/geo-convert.html  
+1. Modify the script raster_vec.py, remove the rasterio, and use gdal instead, ref: https://hydro-informatics.com/jupyter/geo-convert.html  
+2. create crop class. merge the crop, crop_scales, crop2vec.
+3. move the img_extent.img2extent/.imgs2extent to the crop module.
+
+
 
 
 

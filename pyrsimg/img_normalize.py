@@ -8,9 +8,16 @@ import numpy as np
 class img_normalize:
     '''normalization with the given per-band max and min values'''
     def __init__(self, max_bands, min_bands):
-        '''max, min: list, values corresponding to each band'''
+        '''
+        args:
+            max, min: list, values corresponding to each band
+        '''
         self.max, self.min = max_bands, min_bands      
     def __call__(self, image):
+        '''
+        arg:
+            image: np.array.
+        '''
         image_nor = []
         if isinstance(self.max,int):            
             self.max = [self.max for i in range(image.shape[-1])]
