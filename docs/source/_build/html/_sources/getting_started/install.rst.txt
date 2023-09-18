@@ -4,8 +4,6 @@
 Installation
 ============
 
-Quickstart
-----------
 Using pip |Pypi install| 
 ------------------------
 
