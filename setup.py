@@ -20,6 +20,7 @@ setup(
     license='GPL License',  
     packages=find_packages(),  
     install_requires=['pyproj',   
+                      'gdal',
                       'torch',  
                       'scikit-learn', 
                       'numpy', 
