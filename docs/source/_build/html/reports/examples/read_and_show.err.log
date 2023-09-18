@@ -23,28 +23,29 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-
-l8_img = readTiff(path_rsimg)
-vars(l8_img).keys()
+import os
+from pyrsimg import readTiff
+from pyrsimg import imgShow, imsShow
+import matplotlib.pyplot as plt
 
 ------------------
 
------ stderr -----
-ERROR 4: docs/source/examples/data/l8_scene_05.tif: No such file or directory
-------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mAttributeError[0m                            Traceback (most recent call last)
-Cell [0;32mIn[3], line 1[0m
-[0;32m----> 1[0m l8_img [38;5;241m=[39m [43mreadTiff[49m[43m([49m[43mpath_rsimg[49m[43m)[49m
-[1;32m      2[0m [38;5;28mvars[39m(l8_img)[38;5;241m.[39mkeys()
+[0;31mZipImportError[0m                            Traceback (most recent call last)
+Cell [0;32mIn[1], line 2[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mos[39;00m
+[0;32m----> 2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpyrsimg[39;00m [38;5;28;01mimport[39;00m readTiff
+[1;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpyrsimg[39;00m [38;5;28;01mimport[39;00m imgShow, imsShow
+[1;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m [38;5;28;01mas[39;00m [38;5;21;01mplt[39;00m
 
-File [0;32m~/miniconda3/envs/venv/lib/python3.11/site-packages/pyrsimg-1.0.0-py3.11.egg/pyrsimg/rsimg_io.py:23[0m, in [0;36mreadTiff.__init__[0;34m(self, path_in)[0m
-[1;32m     21[0m [38;5;28;01mdef[39;00m [38;5;21m__init__[39m([38;5;28mself[39m, path_in):
-[1;32m     22[0m     RS_Data[38;5;241m=[39mgdal[38;5;241m.[39mOpen(path_in)
-[0;32m---> 23[0m     [38;5;28mself[39m[38;5;241m.[39mgeotrans [38;5;241m=[39m [43mRS_Data[49m[38;5;241;43m.[39;49m[43mGetGeoTransform[49m()  [38;5;66;03m# [39;00m
-[1;32m     24[0m     [38;5;28mself[39m[38;5;241m.[39mrow [38;5;241m=[39m RS_Data[38;5;241m.[39mRasterYSize
-[1;32m     25[0m     [38;5;28mself[39m[38;5;241m.[39mcol [38;5;241m=[39m RS_Data[38;5;241m.[39mRasterXSize  [38;5;66;03m# [39;00m
+File [0;32m~/miniconda3/envs/venv/lib/python3.11/site-packages/pyrsimg-1.0.0-py3.11.egg/pyrsimg/__init__.py:10[0m
 
-[0;31mAttributeError[0m: 'NoneType' object has no attribute 'GetGeoTransform'
+File [0;32m<frozen zipimport>:195[0m, in [0;36mget_code[0;34m(self, fullname)[0m
+
+File [0;32m<frozen zipimport>:758[0m, in [0;36m_get_module_code[0;34m(self, fullname)[0m
+
+File [0;32m<frozen zipimport>:604[0m, in [0;36m_get_data[0;34m(archive, toc_entry)[0m
+
+[0;31mZipImportError[0m: bad local file header: '/Users/luo/miniconda3/envs/venv/lib/python3.11/site-packages/pyrsimg-1.0.0-py3.11.egg'
 
