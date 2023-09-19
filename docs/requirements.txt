@@ -2,4 +2,5 @@ sphinx
 sphinx-rtd-theme
 myst-nb
 pyrsimg
+gdal
 
