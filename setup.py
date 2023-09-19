@@ -27,7 +27,7 @@ setup(
                       'opencv-python', 
                       'matplotlib', 
                       'scipy', 
-                      'astropy'],   ## gdal shoule be installed by the user.
+                      'astropy'],   ## for windows users, gdal shoule be installed by the user.
     python_requires='>=3.9',                # Minimum version requirement of the package
     )
 
