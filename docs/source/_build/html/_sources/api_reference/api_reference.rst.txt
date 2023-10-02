@@ -21,7 +21,6 @@ rsimg_io
     :retrun: None
 
 
-
 geo_imgxy
 -----------------
 
@@ -42,10 +41,9 @@ geo_imgxy
             
             x: x-coord corresponding to srs_from
 
-            y: corresponding to srs_to
+            y: y-coord corresponding to srs_from
 
-    :retrun: utm_zone_number
-
+    :retrun: (x, y): x-coord and y-coord corresponding to srs_to
 
 
 .. function:: geo2imagexy(x, y, gdal_trans, integer=True)
@@ -79,56 +77,10 @@ geo_imgxy
              y: geographical coordinates at y-axis (left up of pixel)
 
 
-img_extent
-------------------
-
-.. function:: get_img_extent(path_img)
-
-    Description: obtain the image extent.
-
-    :param:  path_img: path of the remote sensing image.
-    :retrun: extent: image extent. list -> [left, right, bottom, up]
-             espg_code: ESPG code
-             
-.. function:: imgs_in_extent(path_img)
-
-    Description: Selected imgs that in the given extent.
-
-    :param:  paths_img: list, images paths
-
-             extent: image extent. list -> [left, right, bottom, up]
-    :retrun: paths_imgs_extent, list.
-
-
-.. function:: img2extent(path_img, extent, size_target=None, path_save=None)
-
-    Description: Crop image to given extent/size.
-
-    :param: path_img: string, the image path to be croped.
-
-            extent: extent to which image should be croped; list/tuple,(left, right, down, up). 
-
-            size_target: size to which image should be croped list/tuple, (row, col)
-    :retrun: img_croped: the croped image, np.array()
-
-
-.. function:: imgs2extent(paths_img, extent, path_save=None)
-
-    Description: crop multiple images to the given extent.
-
-    :param: dir_data: string, directory of the tiled data
-
-            extent: list, [left, right, bottom, up], can be obtained by readTiff() function.
-
-            path_save: string, the file path to be saved. 
-    :retrun: img_croped: the croped image.
-
-
-
 img_normalize
 ---------------------
 
-.. class:: img_normalize(max_bands, min_bands)(image)
+.. function:: img_normalize(img, max_bands, min_bands)
 
     Description: image normalization.
 
@@ -141,7 +93,7 @@ img_normalize
     :retrun: image_nor: the normalized image.
 
 
-img2patch (class)  
+img2patch
 ---------------------------
 
 .. class:: img2patch(img, patch_size, edge_overlay)
@@ -179,27 +131,44 @@ img2patch (class)
 
 
 
-.. function:: crop(image, size=(256, 256), channel_first=False)
+.. class:: crop2size(img, channel_first=False)
 
     Description: randomly crop corresponding to specific size.
     
-    :param: img: np.array(), (height, width, channels), the remote senisng image.
-                       
-            size: tuble/list, (height, width)
+    :param:  img: np.array().  
 
-    :retrun: patch, the cropped patch from the image.
+             channel_first: True or False.
+
+    :method: .toSize(size=(256, 256))
+    
+            Descrition: randomly crop corresponding to specific size
+
+            :param: size: tuble/list, (height, width)
+
+            :retrun: patch, the cropped patch from the image.
 
 
+    :method: .toScales(scales=(2048, 512, 256))
 
-.. function:: crop_scales(image, scales=(2048, 512, 256), channel_first=False)
+            Description: randomly crop multiple-scale patches (from high to low) from remote sensing image.
+        
+            :param: scales: tuple or list (high scale -> low scale)
+            
+            :return: patches_group_down: list of multiscale patches.
 
-    Description: Randomly crop multiple-scale pari-wise patches and truths (from high to low) from remote sensing image and truth image.
+.. class:: crop2extent(extent, size_target=None)
 
-    :param: img: np.array(), (height, width, channels), the remote senisng image.
-                        
-            scales: tuple or list (high scale -> low scale)
+    Description: Crop image with specific geographical extent.
+    
+    :method: .img2extent(path_img, path_save=None)
 
-    :retrun: patches_group_down: list of multiscale patches.
+            :param: path_img: string, the image path to be croped.
+                    
+                    size_target: size to which image should be croped list/tuple, (row, col)
+
+                    path_save: string, the path for output saving.    
+
+            :retrun: img_croped: the croped image, np.array()
 
 
 imgShow

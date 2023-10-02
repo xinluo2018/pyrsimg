@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Read and show &mdash; pyrsimg 1.0 documentation</title>
+  <title>Read and show &mdash; pyrsimg 1.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -17,11 +17,10 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Convert image to patches." href="img_patch_convert.html" /> 
+    <link rel="prev" title="Convert image to patch." href="img_patch_convert.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,11 +53,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="img_patch_convert.html">Convert image to patches.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="img_patch_convert.html">Convert image to patch.</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Read and show</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#read-the-remote-sensing-image">Read the remote sensing image.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#show-the-single-image">Show the single image.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#show-multiple-images">Show multiple images.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#read-the-remote-sensing-image">1. Read the remote sensing image.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#show-the-single-image">2.Show the single image.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#show-multiple-images">3. Show multiple images.</a></li>
 </ul>
 </li>
 </ul>
@@ -98,19 +97,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">readTiff</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">imgShow</span><span class="p">,</span> <span class="n">imsShow</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;pyrsimg&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -121,7 +107,7 @@
 </div>
 </div>
 <section id="read-the-remote-sensing-image">
-<h2>Read the remote sensing image.<a class="headerlink" href="#read-the-remote-sensing-image" title="Permalink to this heading"></a></h2>
+<h2>1. Read the remote sensing image.<a class="headerlink" href="#read-the-remote-sensing-image" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l8_img</span> <span class="o">=</span> <span class="n">readTiff</span><span class="p">(</span><span class="n">path_rsimg</span><span class="p">)</span>
@@ -130,14 +116,20 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;geotrans&#39;, &#39;row&#39;, &#39;col&#39;, &#39;bands&#39;, &#39;espg_code&#39;, &#39;array&#39;])
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/luo/miniconda3/envs/venv-pyrsimg/lib/python3.9/site-packages/osgeo/gdal.py:287: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
+  warnings.warn(
+Warning 1: PROJ: proj_create_from_database: Cannot find proj.db
+Warning 1: The definition of projected CRS EPSG:32630 got from GeoTIFF keys is not the same as the one from the EPSG registry, which may cause issues during reprojection operations. Set GTIFF_SRS_SOURCE configuration option to EPSG to use official parameters (overriding the ones from GeoTIFF keys), or to GEOKEYS to use custom values from GeoTIFF keys and drop the EPSG code.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;geotrans&#39;, &#39;row&#39;, &#39;col&#39;, &#39;bands&#39;, &#39;epsg_code&#39;, &#39;array&#39;])
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="show-the-single-image">
-<h2>Show the single image.<a class="headerlink" href="#show-the-single-image" title="Permalink to this heading"></a></h2>
+<h2>2.Show the single image.<a class="headerlink" href="#show-the-single-image" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -151,7 +143,7 @@
 </div>
 </section>
 <section id="show-multiple-images">
-<h2>Show multiple images.<a class="headerlink" href="#show-multiple-images" title="Permalink to this heading"></a></h2>
+<h2>3. Show multiple images.<a class="headerlink" href="#show-multiple-images" title="Permalink to this heading"></a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
@@ -174,7 +166,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="img_patch_convert.html" class="btn btn-neutral float-left" title="Convert image to patches." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="img_patch_convert.html" class="btn btn-neutral float-left" title="Convert image to patch." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

@@ -9,6 +9,10 @@ Toolkit for easy processing of remote sensing image, particularly the processing
 or:   
 ```pip install gdal```
 
+## Examples:
+1. [**Image reading and show.**](https://pyrsimg.readthedocs.io/en/latest/examples/read_and_show.html)   
+2. [**Conversion from image to patch.**](https://pyrsimg.readthedocs.io/en/latest/examples/img_patch_convert.html)
+
 
 ## dataio  
 - **rsimg_io**    
@@ -16,9 +20,9 @@ or:
 
 ## process  
 - **img2patch**      
-  img2patch (class): toPatch, higher_patch_crop, toImage, crop, crop_scales   
-- **image_extent**    
-  get_img_extent, imgs_in_extent, img2extent, imgs2extent.   
+  img2patch (class): toPatch, higher_patch_crop, toImage
+  crop2size (class): toSize, toScales
+  crop2extent (class): img2extent
 - **image normalization**   
   img_normalize.py   
 - **image transform**     
@@ -36,7 +40,7 @@ or:
 ## visual   
 - **remote sensing image**    
   imgShow, imsShow   
-- **metric_plot**   
+
 
 ## metrics  
 - **metrics**      
@@ -45,9 +49,7 @@ or:
   smooth
 
 ## To do   
-1. Modify the script raster_vec.py, remove the rasterio, and use gdal instead, ref: https://hydro-informatics.com/jupyter/geo-convert.html  
-2. create crop class. merge the crop, crop_scales, crop2vec.
-3. move the img_extent.img2extent/.imgs2extent to the crop module.
+
 
 
 

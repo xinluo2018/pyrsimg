@@ -25,6 +25,8 @@ Or:
 
   conda install gdal
 
+if some bugs of gdal still exists, we recomend the user install the gdal of version 3.0.2.
+
 
 
 

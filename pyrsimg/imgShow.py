@@ -13,6 +13,7 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
     Description: show the single image.
     args:
         img: (row, col, band) or (row, col), DN range should be in [0,1]
+        ax: axes for showing image.
         extent: list, the coordinates of the extent. 
         num_bands: a list/tuple, [red_band,green_band,blue_band]
         clip_percent: for linear strech, value within the range of 0-100. 
@@ -93,7 +94,7 @@ def imsShow(img_list, img_name_list, clip_list=None, \
         return: None
     '''
     if not clip_list:
-        clip_list = [0 for i in range(len(img_list))]
+        clip_list = [2 for i in range(len(img_list))]
     if not color_bands_list:
         color_bands_list = [[2, 1, 0] for i in range(len(img_list))]
     if row == None:

@@ -4,9 +4,8 @@
 # des: image location transform between different coordinate system. 
 # -----
 
-import pyproj
 import numpy as np
-
+from osgeo import osr, ogr
 
 def get_utm_zone(lon):
   '''
@@ -21,13 +20,19 @@ def coor2coor(srs_from, srs_to, x, y):
     """
     Transform coordinates from srs_from to srs_to
     input:
-        srs_from and srs_to are EPSG number (e.g., 4326, 3031)
+        srs_from and srs_to: EPSG number, (e.g., 4326, 3031)
         x and y are x-coord and y-coord corresponding to srs_from and srs_to    
     return:
         x-coord and y-coord in srs_to 
     """
-    transformer = pyproj.Transformer.from_crs(srs_from, srs_to,always_xy=True)
-    return transformer.transform(x,y)
+    sr_in = osr.SpatialReference(); sr_in.ImportFromEPSG(srs_from)    
+    sr_out = osr.SpatialReference(); sr_out.ImportFromEPSG(srs_to)     
+    Point = ogr.Geometry(ogr.wkbPoint)
+    Point.AddPoint(x, y)
+    Point.AssignSpatialReference(sr_in)
+    Point.TransformTo(sr_out)
+    return (Point.GetX(), Point.GetY())
+
 
 def geo2imagexy(x, y, gdal_trans, integer=True):
     '''

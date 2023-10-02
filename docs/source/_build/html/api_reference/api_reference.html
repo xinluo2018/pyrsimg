@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash; pyrsimg 1.0 documentation</title>
+  <title>API Reference &mdash; pyrsimg 1.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -17,11 +17,10 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Convert image to patches." href="../examples/img_patch_convert.html" />
+    <link rel="next" title="Convert image to patch." href="../examples/img_patch_convert.html" />
     <link rel="prev" title="Installation" href="../getting_started/install.html" /> 
 </head>
 
@@ -52,73 +51,22 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#rsimg-io">rsimg_io</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#readTiff"><code class="docutils literal notranslate"><span class="pre">readTiff()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#writeTiff"><code class="docutils literal notranslate"><span class="pre">writeTiff()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#geo-imgxy">geo_imgxy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#get_utm_zone"><code class="docutils literal notranslate"><span class="pre">get_utm_zone()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#coor2coor"><code class="docutils literal notranslate"><span class="pre">coor2coor()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#geo2imagexy"><code class="docutils literal notranslate"><span class="pre">geo2imagexy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagexy2geo"><code class="docutils literal notranslate"><span class="pre">imagexy2geo()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#img-extent">img_extent</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#get_img_extent"><code class="docutils literal notranslate"><span class="pre">get_img_extent()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imgs_in_extent"><code class="docutils literal notranslate"><span class="pre">imgs_in_extent()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#img2extent"><code class="docutils literal notranslate"><span class="pre">img2extent()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imgs2extent"><code class="docutils literal notranslate"><span class="pre">imgs2extent()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#img-normalize">img_normalize</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#img_normalize"><code class="docutils literal notranslate"><span class="pre">img_normalize</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#img2patch-class">img2patch (class)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#img2patch"><code class="docutils literal notranslate"><span class="pre">img2patch</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#crop"><code class="docutils literal notranslate"><span class="pre">crop()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#crop_scales"><code class="docutils literal notranslate"><span class="pre">crop_scales()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#imgshow">imgShow</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#imgShow"><code class="docutils literal notranslate"><span class="pre">imgShow()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imsShow"><code class="docutils literal notranslate"><span class="pre">imsShow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#lay-stack">lay_stack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#lay_stack"><code class="docutils literal notranslate"><span class="pre">lay_stack()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#metric-proc">metric_proc</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#smooth"><code class="docutils literal notranslate"><span class="pre">smooth()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#metric">metric</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#acc_matrix"><code class="docutils literal notranslate"><span class="pre">acc_matrix()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#acc_miou"><code class="docutils literal notranslate"><span class="pre">acc_miou()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#oa_binary"><code class="docutils literal notranslate"><span class="pre">oa_binary()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#miou_binary"><code class="docutils literal notranslate"><span class="pre">miou_binary()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#raster-vec">raster_vec</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#raster2vec"><code class="docutils literal notranslate"><span class="pre">raster2vec()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vec2mask"><code class="docutils literal notranslate"><span class="pre">vec2mask()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#transform-time">transform_time</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#date2doy"><code class="docutils literal notranslate"><span class="pre">date2doy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#doy2date"><code class="docutils literal notranslate"><span class="pre">doy2date()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dt64_to_dyr"><code class="docutils literal notranslate"><span class="pre">dt64_to_dyr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#second_to_dyr"><code class="docutils literal notranslate"><span class="pre">second_to_dyr()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#rsimg-io">rsimg_io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#geo-imgxy">geo_imgxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#img-normalize">img_normalize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#img2patch">img2patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#imgshow">imgShow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lay-stack">lay_stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metric-proc">metric_proc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metric">metric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raster-vec">raster_vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transform-time">transform_time</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../examples/img_patch_convert.html">Convert image to patches.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/img_patch_convert.html">Convert image to patch.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/read_and_show.html">Read and show</a></li>
 </ul>
 
@@ -188,13 +136,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="get_utm_zone">
 <span class="sig-name descname"><span class="pre">get_utm_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_utm_zone" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-30">Description: Get utm zone from the given wgs84 coordinates.</p>
+<dd><p class="linemarker linemarker-29">Description: Get utm zone from the given wgs84 coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-32">lon: the given longitute, should be in the range of [-180, 180]</p>
+<dd class="field-odd"><p class="linemarker linemarker-31">lon: the given longitute, should be in the range of [-180, 180]</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-33">utm_zone_number</p>
+<dd class="field-even"><p class="linemarker linemarker-32">utm_zone_number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -202,16 +150,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="coor2coor">
 <span class="sig-name descname"><span class="pre">coor2coor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srs_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srs_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#coor2coor" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-37">Description: Transform coordinates from srs_from to srs_to</p>
+<dd><p class="linemarker linemarker-36">Description: Transform coordinates from srs_from to srs_to</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-39">srs_from:  EPSG number (e.g., 4326, 3031)</p>
-<p class="linemarker linemarker-41">srs_to: EPSG number (e.g., 4326, 3031)</p>
-<p class="linemarker linemarker-43">x: x-coord corresponding to srs_from</p>
-<p class="linemarker linemarker-45">y: corresponding to srs_to</p>
+<dd class="field-odd"><p class="linemarker linemarker-38">srs_from:  EPSG number (e.g., 4326, 3031)</p>
+<p class="linemarker linemarker-40">srs_to: EPSG number (e.g., 4326, 3031)</p>
+<p class="linemarker linemarker-42">x: x-coord corresponding to srs_from</p>
+<p class="linemarker linemarker-44">y: y-coord corresponding to srs_from</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-47">utm_zone_number</p>
+<dd class="field-even"><p class="linemarker linemarker-46">(x, y): x-coord and y-coord corresponding to srs_to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,16 +167,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="geo2imagexy">
 <span class="sig-name descname"><span class="pre">geo2imagexy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdal_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geo2imagexy" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-53">Description: from georeferenced location (i.e., lon, lat) to image location(col,row).</p>
-<p class="linemarker linemarker-55">Note: the coordinate system should be same between x/y and gdal_trans.</p>
+<dd><p class="linemarker linemarker-51">Description: from georeferenced location (i.e., lon, lat) to image location(col,row).</p>
+<p class="linemarker linemarker-53">Note: the coordinate system should be same between x/y and gdal_trans.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-57">gdal_proj: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()[‘geotrans’]</p>
-<p class="linemarker linemarker-59">x: project or georeferenced x, i.e.,lon</p>
-<p class="linemarker linemarker-61">y: project or georeferenced y, i.e., lat</p>
+<dd class="field-odd"><p class="linemarker linemarker-55">gdal_proj: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()[‘geotrans’]</p>
+<p class="linemarker linemarker-57">x: project or georeferenced x, i.e.,lon</p>
+<p class="linemarker linemarker-59">y: project or georeferenced y, i.e., lat</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-63">utm_zone_number</p>
+<dd class="field-even"><p class="linemarker linemarker-61">utm_zone_number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -236,81 +184,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="imagexy2geo">
 <span class="sig-name descname"><span class="pre">imagexy2geo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdal_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagexy2geo" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-69">Description: from image location(col,row) to georeferenced location (i.e., lon, lat).</p>
+<dd><p class="linemarker linemarker-67">Description: from image location(col,row) to georeferenced location (i.e., lon, lat).</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-71">img_gdal: GDAL data (read by gdal.Open()</p>
-<p class="linemarker linemarker-73">row: row of the input image (dataset)</p>
-<p class="linemarker linemarker-75">col: col of the input image (dataset)</p>
+<dd class="field-odd"><p class="linemarker linemarker-69">img_gdal: GDAL data (read by gdal.Open()</p>
+<p class="linemarker linemarker-71">row: row of the input image (dataset)</p>
+<p class="linemarker linemarker-73">col: col of the input image (dataset)</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-77">x: geographical coordinates at x-axis (left up of pixel)</p>
-<p class="linemarker linemarker-79">y: geographical coordinates at y-axis (left up of pixel)</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="img-extent">
-<h2>img_extent<a class="headerlink" href="#img-extent" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="get_img_extent">
-<span class="sig-name descname"><span class="pre">get_img_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_img_extent" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-87">Description: obtain the image extent.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-89">path_img: path of the remote sensing image.</p>
-</dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-90">extent: image extent. list -&gt; [left, right, bottom, up]
-espg_code: ESPG code</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="imgs_in_extent">
-<span class="sig-name descname"><span class="pre">imgs_in_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgs_in_extent" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-95">Description: Selected imgs that in the given extent.</p>
-<dl class="field-list">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-97">paths_img: list, images paths</p>
-<p class="linemarker linemarker-99">extent: image extent. list -&gt; [left, right, bottom, up]</p>
-</dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-100">paths_imgs_extent, list.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="img2extent">
-<span class="sig-name descname"><span class="pre">img2extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img2extent" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-105">Description: Crop image to given extent/size.</p>
-<dl class="field-list">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-107">path_img: string, the image path to be croped.</p>
-<p class="linemarker linemarker-109">extent: extent to which image should be croped; list/tuple,(left, right, down, up).</p>
-<p class="linemarker linemarker-111">size_target: size to which image should be croped list/tuple, (row, col)</p>
-</dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-112">img_croped: the croped image, np.array()</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="imgs2extent">
-<span class="sig-name descname"><span class="pre">imgs2extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths_img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgs2extent" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-117">Description: crop multiple images to the given extent.</p>
-<dl class="field-list">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-119">dir_data: string, directory of the tiled data</p>
-<p class="linemarker linemarker-121">extent: list, [left, right, bottom, up], can be obtained by readTiff() function.</p>
-<p class="linemarker linemarker-123">path_save: string, the file path to be saved.</p>
-</dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-124">img_croped: the croped image.</p>
+<dd class="field-even"><p class="linemarker linemarker-75">x: geographical coordinates at x-axis (left up of pixel)</p>
+<p class="linemarker linemarker-77">y: geographical coordinates at y-axis (left up of pixel)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -318,101 +201,128 @@ espg_code: ESPG code</p>
 </section>
 <section id="img-normalize">
 <h2>img_normalize<a class="headerlink" href="#img-normalize" title="Permalink to this heading"></a></h2>
-<dl class="py class">
+<dl class="py function">
 <dt class="sig sig-object py" id="img_normalize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_bands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bands)(image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img_normalize" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-133">Description: image normalization.</p>
+<span class="sig-name descname"><span class="pre">img_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bands</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img_normalize" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-85">Description: image normalization.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-135">max_bands: list, max value of each the band of image.</p>
-<p class="linemarker linemarker-137">min_bands: list, min values of each the band of image.</p>
-<p class="linemarker linemarker-139">image: np.array.</p>
+<dd class="field-odd"><p class="linemarker linemarker-87">max_bands: list, max value of each the band of image.</p>
+<p class="linemarker linemarker-89">min_bands: list, min values of each the band of image.</p>
+<p class="linemarker linemarker-91">image: np.array.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-141">image_nor: the normalized image.</p>
+<dd class="field-even"><p class="linemarker linemarker-93">image_nor: the normalized image.</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
-<section id="img2patch-class">
-<h2>img2patch (class)<a class="headerlink" href="#img2patch-class" title="Permalink to this heading"></a></h2>
+<section id="img2patch">
+<h2>img2patch<a class="headerlink" href="#img2patch" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="img2patch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img2patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_overlay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#img2patch" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-149">Description: Conversion between the remote sensing image and patches</p>
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img2patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_overlay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-101">Description: Conversion between the remote sensing image and patches</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-151">img: np.array()</p>
-<p class="linemarker linemarker-153">patch_size: size of the patch</p>
-<p class="linemarker linemarker-155">edge_overlay: an even number, single-side overlay of the neighboring images.</p>
+<dd class="field-odd"><p class="linemarker linemarker-103">img: np.array()</p>
+<p class="linemarker linemarker-105">patch_size: size of the patch</p>
+<p class="linemarker linemarker-107">edge_overlay: an even number, single-side overlay of the neighboring images.</p>
 </dd>
 <dt class="field-even">Method<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-156">.toPatch():</p>
-<p class="linemarker linemarker-158">Description: convert img to patches.</p>
+<dd class="field-even"><p class="linemarker linemarker-108">.toPatch():</p>
+<p class="linemarker linemarker-110">Description: convert img to patches.</p>
 <dl class="field-list">
 <dt class="field-odd">param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-160">None</p>
+<dd class="field-odd"><p class="linemarker linemarker-112">None</p>
 </dd>
 <dt class="field-even">retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-162">patch_list: contains all generated patches.</p>
-<p class="linemarker linemarker-164">start_list: contains all start positions(row, col) of the generated patches.</p>
+<dd class="field-even"><p class="linemarker linemarker-114">patch_list: contains all generated patches.</p>
+<p class="linemarker linemarker-116">start_list: contains all start positions(row, col) of the generated patches.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Method<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-165">.higher_patch_crop(higher_patch_size)</p>
-<p class="linemarker linemarker-167">Description: crop the higher-scale patch</p>
+<dd class="field-odd"><p class="linemarker linemarker-117">.higher_patch_crop(higher_patch_size)</p>
+<p class="linemarker linemarker-119">Description: crop the higher-scale patch</p>
 <dl class="field-list simple">
 <dt class="field-odd">param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-169">higher_patch_size: int, the lager patch size compared the low-scale patch size.</p>
+<dd class="field-odd"><p class="linemarker linemarker-121">higher_patch_size: int, the lager patch size compared the low-scale patch size.</p>
 </dd>
 <dt class="field-even">retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-170">higher_patch_list: list, contains higher-scale patches corresponding to the lower-scale patches.</p>
+<dd class="field-even"><p class="linemarker linemarker-122">higher_patch_list: list, contains higher-scale patches corresponding to the lower-scale patches.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Method<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-172">.toImage(patch_list)</p>
-<p class="linemarker linemarker-174">Description: merge patches into one image.</p>
+<dd class="field-even"><p class="linemarker linemarker-124">.toImage(patch_list)</p>
+<p class="linemarker linemarker-126">Description: merge patches into one image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-176">patch_list: list of the all patches.</p>
+<dd class="field-odd"><p class="linemarker linemarker-128">patch_list: list of the all patches.</p>
 </dd>
 <dt class="field-even">retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-178">img_array: the merged image by patches</p>
+<dd class="field-even"><p class="linemarker linemarker-130">img_array: the merged image by patches</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="crop">
-<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(256,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-184">Description: randomly crop corresponding to specific size.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="crop2size">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">crop2size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop2size" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-136">Description: randomly crop corresponding to specific size.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-186">img: np.array(), (height, width, channels), the remote senisng image.</p>
-<p class="linemarker linemarker-188">size: tuble/list, (height, width)</p>
+<dd class="field-odd"><p class="linemarker linemarker-138">img: np.array().</p>
+<p class="linemarker linemarker-140">channel_first: True or False.</p>
 </dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-190">patch, the cropped patch from the image.</p>
+<dt class="field-even">Method<span class="colon">:</span></dt>
+<dd class="field-even"><p class="linemarker linemarker-142">.toSize(size=(256, 256))</p>
+<p class="linemarker linemarker-144">Descrition: randomly crop corresponding to specific size</p>
+<dl class="field-list simple">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-146">size: tuble/list, (height, width)</p>
+</dd>
+<dt class="field-even">retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p class="linemarker linemarker-148">patch, the cropped patch from the image.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Method<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-151">.toScales(scales=(2048, 512, 256))</p>
+<p class="linemarker linemarker-153">Description: randomly crop multiple-scale patches (from high to low) from remote sensing image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-155">scales: tuple or list (high scale -&gt; low scale)</p>
+</dd>
+<dt class="field-even">return<span class="colon">:</span></dt>
+<dd class="field-even"><p class="linemarker linemarker-157">patches_group_down: list of multiscale patches.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="crop_scales">
-<span class="sig-name descname"><span class="pre">crop_scales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(2048,</span> <span class="pre">512,</span> <span class="pre">256)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop_scales" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-196">Description: Randomly crop multiple-scale pari-wise patches and truths (from high to low) from remote sensing image and truth image.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="crop2extent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">crop2extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crop2extent" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-161">Description: Crop image with specific geographical extent.</p>
 <dl class="field-list">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-198">img: np.array(), (height, width, channels), the remote senisng image.</p>
-<p class="linemarker linemarker-200">scales: tuple or list (high scale -&gt; low scale)</p>
+<dt class="field-odd">Method<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-163">.img2extent(path_img, path_save=None)</p>
+<dl class="field-list">
+<dt class="field-odd">param<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-165">path_img: string, the image path to be croped.</p>
+<p class="linemarker linemarker-167">size_target: size to which image should be croped list/tuple, (row, col)</p>
+<p class="linemarker linemarker-169">path_save: string, the path for output saving.</p>
 </dd>
-<dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-202">patches_group_down: list of multiscale patches.</p>
+<dt class="field-even">retrun<span class="colon">:</span></dt>
+<dd class="field-even"><p class="linemarker linemarker-171">img_croped: the croped image, np.array()</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -423,19 +333,19 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="imgShow">
 <span class="sig-name descname"><span class="pre">imgShow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(2,</span> <span class="pre">1,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_band_clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_per</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">focus_pix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imgShow" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-209">Description: show the single image.</p>
+<dd><p class="linemarker linemarker-178">Description: show the single image.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-211">img: (row, col, band) or (row, col), DN range should be in [0,1]</p>
-<p class="linemarker linemarker-213">extent: list, the coordinates of the extent.</p>
-<p class="linemarker linemarker-215">num_bands: a list/tuple, [red_band,green_band,blue_band]</p>
-<p class="linemarker linemarker-217">clip_percent: for linear strech, value within the range of 0-100.</p>
-<p class="linemarker linemarker-219">per_band_clip: if True, the band values will be clipped by each band respectively.</p>
-<p class="linemarker linemarker-221">focus_per: list, [up_start_percent,down_end_percent,left_start_percent, right_end_percent]; 0 &lt; value &lt; 1</p>
-<p class="linemarker linemarker-223">focus_pix: list, [up_start_pixel,down_end_pixel,left_start_pixel, right_end_pixel]; 0 &lt; value &lt; (width or height) of the image</p>
+<dd class="field-odd"><p class="linemarker linemarker-180">img: (row, col, band) or (row, col), DN range should be in [0,1]</p>
+<p class="linemarker linemarker-182">extent: list, the coordinates of the extent.</p>
+<p class="linemarker linemarker-184">num_bands: a list/tuple, [red_band,green_band,blue_band]</p>
+<p class="linemarker linemarker-186">clip_percent: for linear strech, value within the range of 0-100.</p>
+<p class="linemarker linemarker-188">per_band_clip: if True, the band values will be clipped by each band respectively.</p>
+<p class="linemarker linemarker-190">focus_per: list, [up_start_percent,down_end_percent,left_start_percent, right_end_percent]; 0 &lt; value &lt; 1</p>
+<p class="linemarker linemarker-192">focus_pix: list, [up_start_pixel,down_end_pixel,left_start_pixel, right_end_pixel]; 0 &lt; value &lt; (width or height) of the image</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-225">None</p>
+<dd class="field-even"><p class="linemarker linemarker-194">None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -443,18 +353,18 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="imsShow">
 <span class="sig-name descname"><span class="pre">imsShow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_name_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_bands_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imsShow" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-230">Description: show the multiple images.</p>
+<dd><p class="linemarker linemarker-199">Description: show the multiple images.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-232">img_list: containes all images</p>
-<p class="linemarker linemarker-234">img_names_list: image names corresponding to the images</p>
-<p class="linemarker linemarker-236">clip_list: percent clips (histogram) corresponding to the images</p>
-<p class="linemarker linemarker-238">color_bands_list: color bands combination corresponding to the images</p>
-<p class="linemarker linemarker-240">row, col: the row and col of the figure</p>
-<p class="linemarker linemarker-242">axis: True or False</p>
+<dd class="field-odd"><p class="linemarker linemarker-201">img_list: containes all images</p>
+<p class="linemarker linemarker-203">img_names_list: image names corresponding to the images</p>
+<p class="linemarker linemarker-205">clip_list: percent clips (histogram) corresponding to the images</p>
+<p class="linemarker linemarker-207">color_bands_list: color bands combination corresponding to the images</p>
+<p class="linemarker linemarker-209">row, col: the row and col of the figure</p>
+<p class="linemarker linemarker-211">axis: True or False</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-244">None</p>
+<dd class="field-even"><p class="linemarker linemarker-213">None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -465,16 +375,16 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lay_stack">
 <span class="sig-name descname"><span class="pre">lay_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_imgs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">union</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lay_stack" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-252">Description: layer stacking of the multiple bands of image.</p>
+<dd><p class="linemarker linemarker-221">Description: layer stacking of the multiple bands of image.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-254">path_imgs: list, contains the paths of bands/imgs to be stacked</p>
-<p class="linemarker linemarker-256">path_out: str, the output path of the layer stacked image</p>
-<p class="linemarker linemarker-258">union: bool, if true, the output extent is the extents union of input images. Otherwise, the output extent is the extents intersection of input images.</p>
-<p class="linemarker linemarker-260">res: resolution of the layer stacked image.</p>
+<dd class="field-odd"><p class="linemarker linemarker-223">path_imgs: list, contains the paths of bands/imgs to be stacked</p>
+<p class="linemarker linemarker-225">path_out: str, the output path of the layer stacked image</p>
+<p class="linemarker linemarker-227">union: bool, if true, the output extent is the extents union of input images. Otherwise, the output extent is the extents intersection of input images.</p>
+<p class="linemarker linemarker-229">res: resolution of the layer stacked image.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-262">imgs_stacked: np.array(), the stacked image.</p>
+<dd class="field-even"><p class="linemarker linemarker-231">imgs_stacked: np.array(), the stacked image.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -485,16 +395,16 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="smooth">
 <span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smooth" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-270">Description: smooth the sequential data.</p>
+<dd><p class="linemarker linemarker-239">Description: smooth the sequential data.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-272">y: the sequential data.</p>
-<p class="linemarker linemarker-274">window: the smooth window used for averating y.</p>
-<p class="linemarker linemarker-276">num_sam: the number of sampled data.</p>
+<dd class="field-odd"><p class="linemarker linemarker-241">y: the sequential data.</p>
+<p class="linemarker linemarker-243">window: the smooth window used for averating y.</p>
+<p class="linemarker linemarker-245">num_sam: the number of sampled data.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-277">x: the smoothed sequential data of x-axis.</p>
-<p class="linemarker linemarker-279">y: the smoothed sequential data of y-axis.</p>
+<dd class="field-even"><p class="linemarker linemarker-246">x: the smoothed sequential data of x-axis.</p>
+<p class="linemarker linemarker-248">y: the smoothed sequential data of y-axis.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,17 +415,17 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="acc_matrix">
 <span class="sig-name descname"><span class="pre">acc_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cla_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sam_pixel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acc_matrix" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-285">Description: calculate the accuracy matrix.</p>
+<dd><p class="linemarker linemarker-254">Description: calculate the accuracy matrix.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-287">cla_map: classification result of the full image.</p>
-<p class="linemarker linemarker-289">truth_map: truth image (either truth_map or sam_pixel should be given).</p>
-<p class="linemarker linemarker-291">sam_pixel: np.array, (num_samples,3), col 1,2,3 are the row,col and label.</p>
-<p class="linemarker linemarker-293">id_label: 0/1/2/…, Calculating producer’s or user’s accuracy for target class.</p>
+<dd class="field-odd"><p class="linemarker linemarker-256">cla_map: classification result of the full image.</p>
+<p class="linemarker linemarker-258">truth_map: truth image (either truth_map or sam_pixel should be given).</p>
+<p class="linemarker linemarker-260">sam_pixel: np.array, (num_samples,3), col 1,2,3 are the row,col and label.</p>
+<p class="linemarker linemarker-262">id_label: 0/1/2/…, Calculating producer’s or user’s accuracy for target class.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-295">acc_oa: overall accuracy</p>
-<p class="linemarker linemarker-297">confus_mat: confusion matrix</p>
+<dd class="field-even"><p class="linemarker linemarker-264">acc_oa: overall accuracy</p>
+<p class="linemarker linemarker-266">confus_mat: confusion matrix</p>
 </dd>
 </dl>
 </dd></dl>
@@ -523,15 +433,15 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="acc_miou">
 <span class="sig-name descname"><span class="pre">acc_miou</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cla_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#acc_miou" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-301">Description: calculate the miou metric.</p>
+<dd><p class="linemarker linemarker-270">Description: calculate the miou metric.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-303">cla_map: classification result of the full image</p>
-<p class="linemarker linemarker-305">truth_map: truth image (either truth_map or sam_pixel should be given)</p>
-<p class="linemarker linemarker-307">labels: a list, the class id for calculating. e.g., [0,1,2]</p>
+<dd class="field-odd"><p class="linemarker linemarker-272">cla_map: classification result of the full image</p>
+<p class="linemarker linemarker-274">truth_map: truth image (either truth_map or sam_pixel should be given)</p>
+<p class="linemarker linemarker-276">labels: a list, the class id for calculating. e.g., [0,1,2]</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-309">miou: MIoU metric</p>
+<dd class="field-even"><p class="linemarker linemarker-278">miou: MIoU metric</p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,14 +449,14 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="oa_binary">
 <span class="sig-name descname"><span class="pre">oa_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#oa_binary" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-313">Description: calculate overall accuracy (2-class classification) for each batch.</p>
+<dd><p class="linemarker linemarker-282">Description: calculate overall accuracy (2-class classification) for each batch.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-315">pred: 4D tensor</p>
-<p class="linemarker linemarker-317">truth: 4D tensor</p>
+<dd class="field-odd"><p class="linemarker linemarker-284">pred: 4D tensor</p>
+<p class="linemarker linemarker-286">truth: 4D tensor</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-318">oa: overall accuracy</p>
+<dd class="field-even"><p class="linemarker linemarker-287">oa: overall accuracy</p>
 </dd>
 </dl>
 </dd></dl>
@@ -554,14 +464,14 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="miou_binary">
 <span class="sig-name descname"><span class="pre">miou_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#miou_binary" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-322">Description: calculate miou (2-class classification) for each batch.</p>
+<dd><p class="linemarker linemarker-291">Description: calculate miou (2-class classification) for each batch.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-324">pred: 4D tensor</p>
-<p class="linemarker linemarker-326">truth: 4D tensor</p>
+<dd class="field-odd"><p class="linemarker linemarker-293">pred: 4D tensor</p>
+<p class="linemarker linemarker-295">truth: 4D tensor</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-327">miou: miou metric</p>
+<dd class="field-even"><p class="linemarker linemarker-296">miou: miou metric</p>
 </dd>
 </dl>
 </dd></dl>
@@ -572,15 +482,15 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="raster2vec">
 <span class="sig-name descname"><span class="pre">raster2vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dn_values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raster2vec" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-334">Description: Read input band with Rasterio.</p>
+<dd><p class="linemarker linemarker-303">Description: Read input band with Rasterio.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-336">raster_path: raster path</p>
-<p class="linemarker linemarker-338">output_path: ouput vector path</p>
-<p class="linemarker linemarker-340">dn_values: list, consist of the raster value to be vectorization</p>
+<dd class="field-odd"><p class="linemarker linemarker-305">raster_path: raster path</p>
+<p class="linemarker linemarker-307">output_path: ouput vector path</p>
+<p class="linemarker linemarker-309">dn_values: list, consist of the raster value to be vectorization</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-342">miou: miou metric</p>
+<dd class="field-even"><p class="linemarker linemarker-311">miou: miou metric</p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,15 +498,15 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="vec2mask">
 <span class="sig-name descname"><span class="pre">vec2mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_raster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vec2mask" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-346">Description: generate/save mask file using the vector file(e.g.,.shp,.gpkg).</p>
+<dd><p class="linemarker linemarker-315">Description: generate/save mask file using the vector file(e.g.,.shp,.gpkg).</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-348">path_vec: str, path of the vector data.</p>
-<p class="linemarker linemarker-350">path_raster: str, path of the raster data.</p>
-<p class="linemarker linemarker-352">path_save: str, path to save.</p>
+<dd class="field-odd"><p class="linemarker linemarker-317">path_vec: str, path of the vector data.</p>
+<p class="linemarker linemarker-319">path_raster: str, path of the raster data.</p>
+<p class="linemarker linemarker-321">path_save: str, path to save.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-353">mask: np.array().</p>
+<dd class="field-even"><p class="linemarker linemarker-322">mask: np.array().</p>
 </dd>
 </dl>
 </dd></dl>
@@ -607,17 +517,17 @@ espg_code: ESPG code</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="date2doy">
 <span class="sig-name descname"><span class="pre">date2doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#date2doy" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-361">Description: convert year-month-day-hour-minute to doy (day-of-year)</p>
+<dd><p class="linemarker linemarker-330">Description: convert year-month-day-hour-minute to doy (day-of-year)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-363">year
+<dd class="field-odd"><p class="linemarker linemarker-332">year
 month: 0~12
 day: 0~31
 hour
 minute</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-369">doy: day of the year.</p>
+<dd class="field-even"><p class="linemarker linemarker-338">doy: day of the year.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -625,15 +535,15 @@ minute</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="doy2date">
 <span class="sig-name descname"><span class="pre">doy2date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#doy2date" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-373">Description: Convert doy(day-of-year) to year-month-day-hour-minute formate the function returns the month and the day of the month.</p>
+<dd><p class="linemarker linemarker-342">Description: Convert doy(day-of-year) to year-month-day-hour-minute formate the function returns the month and the day of the month.</p>
 <dl class="field-list">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-375">year</p>
-<p class="linemarker linemarker-377">doy</p>
+<dd class="field-odd"><p class="linemarker linemarker-344">year</p>
+<p class="linemarker linemarker-346">doy</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-379">month</p>
-<p class="linemarker linemarker-381">day: the day of the month</p>
+<dd class="field-even"><p class="linemarker linemarker-348">month</p>
+<p class="linemarker linemarker-350">day: the day of the month</p>
 </dd>
 </dl>
 </dd></dl>
@@ -641,13 +551,13 @@ minute</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dt64_to_dyr">
 <span class="sig-name descname"><span class="pre">dt64_to_dyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt64</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dt64_to_dyr" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-385">Description: Convert datetime64 to decimal year format. e.g., ‘2020-05-23T03:25:22.959373696’ -&gt; 2020.3907103825136.</p>
+<dd><p class="linemarker linemarker-354">Description: Convert datetime64 to decimal year format. e.g., ‘2020-05-23T03:25:22.959373696’ -&gt; 2020.3907103825136.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-387">dt64: np.datetime64 format time</p>
+<dd class="field-odd"><p class="linemarker linemarker-356">dt64: np.datetime64 format time</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-389">dt_float: float, the decimal date.</p>
+<dd class="field-even"><p class="linemarker linemarker-358">dt_float: float, the decimal date.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -655,13 +565,13 @@ minute</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="second_to_dyr">
 <span class="sig-name descname"><span class="pre">second_to_dyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_second</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2000-01-01</span> <span class="pre">00:00:00.0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#second_to_dyr" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-393">Description: convert time (second format) to decimal year. This function suitable for the jason data, sentinel-3 data, and the cryosat2 data for time conversion.</p>
+<dd><p class="linemarker linemarker-362">Description: convert time (second format) to decimal year. This function suitable for the jason data, sentinel-3 data, and the cryosat2 data for time conversion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-395">time_second: seconds from the time start.</p>
+<dd class="field-odd"><p class="linemarker linemarker-364">time_second: seconds from the time start.</p>
 </dd>
 <dt class="field-even">Retrun<span class="colon">:</span></dt>
-<dd class="field-even"><p class="linemarker linemarker-397">time_second_dyr: decimal date.</p>
+<dd class="field-even"><p class="linemarker linemarker-366">time_second_dyr: decimal date.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -674,7 +584,7 @@ minute</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../getting_started/install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../examples/img_patch_convert.html" class="btn btn-neutral float-right" title="Convert image to patches." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../examples/img_patch_convert.html" class="btn btn-neutral float-right" title="Convert image to patch." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

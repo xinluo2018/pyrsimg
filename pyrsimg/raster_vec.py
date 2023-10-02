@@ -2,41 +2,39 @@
 ## creat: 2021.7.15
 ## modify: 2021.11.27
 
-import fiona
-import rasterio
 import numpy as np
-import rasterio.features
-from osgeo import ogr, gdal
-from shapely.geometry import shape, mapping
-from shapely.geometry.multipolygon import MultiPolygon
+from osgeo import ogr, gdal, osr
 
-def raster2vec(raster_path, output_path, dn_values):
-    ''' des: Read input band with Rasterio
-        input:
-            raster_path, output_path: raster and ouput vector path
-            dn_values: list, consist of the raster value to be vectorization
-        return:
-            vector (gpkg format) written to the given path.
+
+def raster2vec(path_raster, path_save, dn_values):
+    ''' 
+    des: Read input band with Rasterio
+    input:
+        raster_path, output_path: raster and ouput vector path
+        dn_values: list, consist of the raster value to be vectorization
+    return:
+        vector (gpkg format) written to the given path.
     '''
-    # Read input band with Rasterio
-    with rasterio.open(raster_path) as src:
-        crs = src.crs
-        src_band = src.read(1)
-        shapes = list(rasterio.features.shapes(src_band, transform=src.transform))
-    shp_schema = {
-        'geometry': 'MultiPolygon',
-        'properties': {'pixelvalue': 'int'}
-        }
-    ## writh out vector
-    with fiona.open(output_path, 'w', 'GPKG', shp_schema, crs) as shp:
-        for pixel_value in dn_values:
-            polygons = [shape(geom) for geom, value in shapes
-                        if value == pixel_value]
-            multipolygon = MultiPolygon(polygons)
-            shp.write({
-                'geometry': mapping(multipolygon),
-                'properties': {'pixelvalue': int(pixel_value)}
-            })
+    raster_ds = gdal.Open(path_raster)
+    raster_band = raster_ds.GetRasterBand(1)
+    raster_srs = osr.SpatialReference()
+    raster_srs.ImportFromWkt(raster_ds.GetProjection())
+    #  create output datasource
+    dst_layername = "polygon"
+    drv = ogr.GetDriverByName('ESRI Shapefile')
+    dst_ds = drv.CreateDataSource(path_save)
+    dst_layer = dst_ds.CreateLayer(dst_layername, geom_type=ogr.wkbPolygon, srs = raster_srs)
+    newField = ogr.FieldDefn('DN', ogr.OFTInteger)
+    dst_layer.CreateField(newField)
+    dst_field = dst_layer.GetLayerDefn().GetFieldIndex('DN')
+    print(dst_layer.GetFeatureCount())
+    gdal.Polygonize(raster_band, None, dst_layer, dst_field, [])
+    print(dst_layer.GetFeatureCount())
+    for i in range(dst_layer.GetFeatureCount()):
+      fea = dst_layer.GetFeature(i)
+      if fea.GetField('DN') not in dn_values:
+        dst_layer.DeleteFeature(i)
+    dst_ds = None
 
 
 def vec2mask(path_vec, path_raster, path_save=None):

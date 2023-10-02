@@ -4,19 +4,20 @@
 
 
 import numpy as np
-from osgeo import gdal
-from osgeo import osr
+from osgeo import gdal, osr
 
 ### tiff image reading
 class readTiff():
     '''
+    des: read in .tiff image.
     arg:
         path_in: image path
     return: 
-        img: numpy array, 
-        exent: tuple, (x_min, x_max, y_min, y_max) 
-        projection:
-        dimentions: (row, col, band)
+        img: numpy array of image
+        bands: number of bands. 
+        geoexent: tuple, (x_min, x_max, y_min, y_max) 
+        row: number of rows of the image
+        col: number of cols of the image
     '''
     def __init__(self, path_in):
         RS_Data=gdal.Open(path_in)
@@ -25,7 +26,7 @@ class readTiff():
         self.col = RS_Data.RasterXSize  # 
         self.bands = RS_Data.RasterCount 
         im_proj = RS_Data.GetProjection()
-        self.espg_code = osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1)        
+        self.epsg_code = int(osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1))
         self.array = RS_Data.ReadAsArray(0, 0, self.col, self.row).astype(float)
         if self.bands > 1:
             self.array = np.transpose(self.array, (1, 2, 0)) # 
