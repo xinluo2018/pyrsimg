@@ -25,13 +25,18 @@ def coor2coor(srs_from, srs_to, x, y):
     return:
         x-coord and y-coord in srs_to 
     """
-    sr_in = osr.SpatialReference(); sr_in.ImportFromEPSG(srs_from)    
-    sr_out = osr.SpatialReference(); sr_out.ImportFromEPSG(srs_to)     
-    Point = ogr.Geometry(ogr.wkbPoint)
-    Point.AddPoint(x, y)
-    Point.AssignSpatialReference(sr_in)
-    Point.TransformTo(sr_out)
-    return (Point.GetX(), Point.GetY())
+    sr_in = osr.SpatialReference(); sr_in.ImportFromEPSG(int(srs_from))    
+    sr_out = osr.SpatialReference(); sr_out.ImportFromEPSG(int(srs_to))     
+    if int(srs_from) == 4326:
+        sr_in.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+    if int(srs_to) == 4326:
+        sr_out.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+    point = ogr.Geometry(ogr.wkbPoint)
+    point.AddPoint(x, y)
+    point.AssignSpatialReference(sr_in)
+    point.TransformTo(sr_out)
+    print(point)
+    return (point.GetX(), point.GetY())
 
 
 def geo2imagexy(x, y, gdal_trans, integer=True):
