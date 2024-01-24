@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
-                clip_percent=2, per_band_clip=False, focus_per=None, focus_pix=None):
+def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_band_clip=False):
     '''
     Description: show the single image.
     args:
@@ -18,35 +17,11 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
         num_bands: a list/tuple, [red_band,green_band,blue_band]
         clip_percent: for linear strech, value within the range of 0-100. 
         per_band_clip: if True, the band values will be clipped by each band respectively. 
-        focus_per: list, [up_start_percent,down_end_percent, \
-                    left_start_percent, right_end_percent]; 0 <= value <= 1
-        focus_pix: list, [up_start_pixel,down_end_pixel, \
-                    left_start_pixel, right_end_pixel]; 0 <= value <= (width or height) of the image
     return: None
     '''
     img = img.copy()
     img[np.isnan(img)]=0
     img = np.squeeze(img)
-    if len(img.shape) == 2:
-        row,col = img.shape
-    elif len(img.shape) == 3:
-        row,col,_ = img.shape
-    row_start = None
-    if focus_pix:  # obtain focused image
-        row_start, row_end, col_start, col_end = focus_pix
-        img = img[row_start:row_end, col_start:col_end]  
-    elif focus_per:  # obtain focused image
-        row_start_percent, row_end_percent, col_start_percent, col_end_percent = focus_per
-        row_start, row_end = int(row*row_start_percent), int(row*row_end_percent)
-        col_start, col_end = int(col*col_start_percent), int(col*col_end_percent)
-        img = img[row_start:row_end, col_start:col_end]
-    if extent and focus_per:    # update the extent
-        x_extent, y_extent = extent[1]-extent[0], extent[3]-extent[2]
-        extent_x_min = (col_start/col)*x_extent + extent[0]
-        extent_x_max = (col_end/col)*x_extent + extent[0]
-        extent_y_min = ((row-row_end)/row)*y_extent + extent[2]
-        extent_y_max = ((row-row_start)/row)*y_extent + extent[2]
-        extent = (extent_x_min, extent_x_max, extent_y_min, extent_y_max)
 
     if np.min(img) == np.max(img):
         if len(img.shape) == 2:

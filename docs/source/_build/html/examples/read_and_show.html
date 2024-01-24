@@ -17,7 +17,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -98,19 +97,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">readTiff</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">imgShow</span><span class="p">,</span> <span class="n">imsShow</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;pyrsimg&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -130,7 +116,31 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;geotrans&#39;, &#39;row&#39;, &#39;col&#39;, &#39;bands&#39;, &#39;epsg_code&#39;, &#39;array&#39;])
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/luo/miniconda3/envs/venv-pyrsimg/lib/python3.9/site-packages/osgeo/gdal.py:287: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR 4: `/Users/luo/Library/CloudStorage/OneDrive-Personal/GitHub/pyrsimg/docs/source/examples/data/l8_scene_05.tif&#39; not recognized as a supported file format.
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">l8_img</span> <span class="o">=</span> <span class="n">readTiff</span><span class="p">(</span><span class="n">path_rsimg</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="nb">vars</span><span class="p">(</span><span class="n">l8_img</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+<span class="nn">File ~/Library/CloudStorage/OneDrive-Personal/GitHub/pyrsimg/pyrsimg/rsimg_io.py:23,</span> in <span class="ni">readTiff.__init__</span><span class="nt">(self, path_in)</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_in</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">23</span>     <span class="n">RS_Data</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">path_in</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="bp">self</span><span class="o">.</span><span class="n">geotrans</span> <span class="o">=</span> <span class="n">RS_Data</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>  <span class="c1"># </span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="bp">self</span><span class="o">.</span><span class="n">row</span> <span class="o">=</span> <span class="n">RS_Data</span><span class="o">.</span><span class="n">RasterYSize</span>
+
+<span class="nn">File ~/miniconda3/envs/venv-pyrsimg/lib/python3.9/site-packages/osgeo/gdal.py:5298,</span> in <span class="ni">Open</span><span class="nt">(*args)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5293</span><span class="w"> </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Open(char const * utf8_path, GDALAccess eAccess=GA_ReadOnly) -&gt; Dataset&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">5295</span> <span class="n">_WarnIfUserHasNotSpecifiedIfUsingExceptions</span><span class="p">()</span>
+<span class="ne">-&gt; </span><span class="mi">5298</span> <span class="k">return</span> <span class="n">_gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
 </div>
 </div>
