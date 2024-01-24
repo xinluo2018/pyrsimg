@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -51,16 +52,60 @@
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#rsimg-io">rsimg_io</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#geo-imgxy">geo_imgxy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#img-normalize">img_normalize</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#img2patch">img2patch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imgshow">imgShow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lay-stack">lay_stack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metric-proc">metric_proc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metric">metric</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#raster-vec">raster_vec</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transform-time">transform_time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rsimg-io">rsimg_io</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#readTiff"><code class="docutils literal notranslate"><span class="pre">readTiff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writeTiff"><code class="docutils literal notranslate"><span class="pre">writeTiff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#geo-imgxy">geo_imgxy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get_utm_zone"><code class="docutils literal notranslate"><span class="pre">get_utm_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#coor2coor"><code class="docutils literal notranslate"><span class="pre">coor2coor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geo2imagexy"><code class="docutils literal notranslate"><span class="pre">geo2imagexy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imagexy2geo"><code class="docutils literal notranslate"><span class="pre">imagexy2geo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#img-normalize">img_normalize</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#img_normalize"><code class="docutils literal notranslate"><span class="pre">img_normalize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#img2patch">img2patch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">img2patch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crop2size"><code class="docutils literal notranslate"><span class="pre">crop2size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crop2extent"><code class="docutils literal notranslate"><span class="pre">crop2extent</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#imgshow">imgShow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#imgShow"><code class="docutils literal notranslate"><span class="pre">imgShow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imsShow"><code class="docutils literal notranslate"><span class="pre">imsShow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lay-stack">lay_stack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lay_stack"><code class="docutils literal notranslate"><span class="pre">lay_stack()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metric-proc">metric_proc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smooth"><code class="docutils literal notranslate"><span class="pre">smooth()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metric">metric</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#acc_matrix"><code class="docutils literal notranslate"><span class="pre">acc_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acc_miou"><code class="docutils literal notranslate"><span class="pre">acc_miou()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oa_binary"><code class="docutils literal notranslate"><span class="pre">oa_binary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#miou_binary"><code class="docutils literal notranslate"><span class="pre">miou_binary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#raster-vec">raster_vec</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raster2vec"><code class="docutils literal notranslate"><span class="pre">raster2vec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vec2mask"><code class="docutils literal notranslate"><span class="pre">vec2mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transform-time">transform_time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#date2doy"><code class="docutils literal notranslate"><span class="pre">date2doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doy2date"><code class="docutils literal notranslate"><span class="pre">doy2date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dt64_to_dyr"><code class="docutils literal notranslate"><span class="pre">dt64_to_dyr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#second_to_dyr"><code class="docutils literal notranslate"><span class="pre">second_to_dyr()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

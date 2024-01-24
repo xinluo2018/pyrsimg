@@ -35,7 +35,6 @@ def coor2coor(srs_from, srs_to, x, y):
     point.AddPoint(x, y)
     point.AssignSpatialReference(sr_in)
     point.TransformTo(sr_out)
-    print(point)
     return (point.GetX(), point.GetY())
 
 

@@ -1,5 +1,5 @@
 ## author: xin luo 
-## creat: 2021.6.18; modify: 2023.8.18
+## creat: 2021.6.18; modify: 2023.10.6
 ## des: .tif image reading and written.
 
 
@@ -40,13 +40,12 @@ class readTiff():
         return extent
 
 
-
 ###  .tiff image write
-def writeTiff(im_data, im_geotrans, im_geosrs, path_out):
+def writeTiff(im_data, im_geotrans, epsg_code, path_out):
     '''
     input:
         im_data: tow dimentions (order: row, col),or three dimentions (order: row, col, band)
-        im_geosrs: espg code correspond to image spatial reference system.
+        epsg_code: epsg code correspond to image spatial reference system.
     '''
     im_data = np.squeeze(im_data)
     if 'int8' in im_data.dtype.name:
@@ -64,7 +63,7 @@ def writeTiff(im_data, im_geotrans, im_geosrs, path_out):
     dataset = driver.Create(path_out, im_width, im_height, im_bands, datatype, options=["TILED=YES", "COMPRESS=LZW"])
     if(dataset!= None):
         dataset.SetGeoTransform(im_geotrans)       # 
-        dataset.SetProjection("EPSG:" + str(im_geosrs))      # 
+        dataset.SetProjection("EPSG:" + str(epsg_code))      # 
     if im_bands > 1:
         for i in range(im_bands):
             dataset.GetRasterBand(i+1).WriteArray(im_data[i])

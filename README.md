@@ -49,8 +49,7 @@ or:
   smooth
 
 ## To do   
-
-
+write function dyr2doy in transform_time.py, about converting decimal year to doy.
 
 
 

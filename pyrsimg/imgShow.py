@@ -1,5 +1,5 @@
 ## author: xin luo
-## create: 2020, modify: 2023.8.18
+## create: 2020, modify: 2024.1.24
 ## des: remote sensing image visualization
 
 
@@ -19,9 +19,9 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
         clip_percent: for linear strech, value within the range of 0-100. 
         per_band_clip: if True, the band values will be clipped by each band respectively. 
         focus_per: list, [up_start_percent,down_end_percent, \
-                    left_start_percent, right_end_percent]; 0 < value < 1
+                    left_start_percent, right_end_percent]; 0 <= value <= 1
         focus_pix: list, [up_start_pixel,down_end_pixel, \
-                    left_start_pixel, right_end_pixel]; 0 < value < (width or height) of the image
+                    left_start_pixel, right_end_pixel]; 0 <= value <= (width or height) of the image
     return: None
     '''
     img = img.copy()
@@ -40,7 +40,7 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), \
         row_start, row_end = int(row*row_start_percent), int(row*row_end_percent)
         col_start, col_end = int(col*col_start_percent), int(col*col_end_percent)
         img = img[row_start:row_end, col_start:col_end]
-    if extent and row_start:    # update the extent
+    if extent and focus_per:    # update the extent
         x_extent, y_extent = extent[1]-extent[0], extent[3]-extent[2]
         extent_x_min = (col_start/col)*x_extent + extent[0]
         extent_x_max = (col_end/col)*x_extent + extent[0]
