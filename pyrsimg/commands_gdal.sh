@@ -19,7 +19,7 @@ gdal_merge.py -init 0 -n -999 -co COMPRESS=LZW -o $path_out $path_in_1 $path_in_
 gdal_merge.py -n -999 -a_nodata -999 -co COMPRESS=LZW -o $path_out $path_in_1 $path_in_2 $path_in_3
 
 ### ------ subset by bounds------ 
-# extent: str(ulx) str(uly) str(lrx) str(lry), e.g., extent='72 38 84 34'
+# extent: 'left up right down', e.g., extent='72 38 84 34'
 gdal_translate -projwin $extent -co COMPRESS=LZW $path_in $path_out
 
 ### ------ subset by .shp file------ 

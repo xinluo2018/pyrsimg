@@ -1,6 +1,6 @@
 ### ----- 
 # author: luo xin, 
-# creat: 2021.6.15, modify: 2022.10.6
+# creat: 2021.6.15, modify: 2024.6.8
 # des: image location transform between different coordinate system. 
 # -----
 
@@ -32,20 +32,20 @@ def coor2coor(srs_from, srs_to, x, y):
     if int(srs_to) == 4326:
         sr_out.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
     point = ogr.Geometry(ogr.wkbPoint)
-    point.AddPoint(x, y)
+    point.AddPoint(float(x), float(y))
     point.AssignSpatialReference(sr_in)
     point.TransformTo(sr_out)
     return (point.GetX(), point.GetY())
 
-
-def geo2imagexy(x, y, gdal_trans, integer=True):
+def geo2imagexy(x, y, gdal_trans, rsimg_array, integer=True):
     '''
     des: from georeferenced location (i.e., lon, lat) to image location(col,row).
     note: the coordinate system should be same between x/y and gdal_trans.
     input:
-        gdal_proj: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()['geotrans']
+        gdal_trans: obtained by gdal.Open() and .GetGeoTransform(), or by geotif_io.readTiff()['geotrans']
         x: project or georeferenced x, i.e.,lon
         y: project or georeferenced y, i.e., lat
+        rsimg_array: np.array(), remote sensing image array, shape = (row, col)/(row, col, bands)
     return: 
         image col and row corresponding to the georeferenced location.
     '''
@@ -53,7 +53,10 @@ def geo2imagexy(x, y, gdal_trans, integer=True):
     b = np.array([x - gdal_trans[0], y - gdal_trans[3]])
     col_img, row_img = np.linalg.solve(a, b)
     if integer:
-        col_img, row_img = np.floor(col_img).astype('int'), np.floor(row_img).astype('int')
+        row_img, col_img = np.floor(row_img).astype('int'), np.floor(col_img).astype('int')
+    ## Mask out the points outside the image.
+    ids = np.where((row_img<rsimg_array.shape[0]) & (col_img<rsimg_array.shape[1]))[0]
+    row_img, col_img = row_img[ids], col_img[ids]
     return row_img, col_img
 
 def imagexy2geo(row, col, gdal_trans):

@@ -102,6 +102,33 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">readTiff</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">imgShow</span><span class="p">,</span> <span class="n">imsShow</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">pyrsimg</span> <span class="kn">import</span> <span class="n">img2patch</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">CloudStorage</span><span class="o">/</span><span class="n">OneDrive</span><span class="o">-</span><span class="n">Personal</span><span class="o">/</span><span class="n">GitHub</span><span class="o">/</span><span class="n">pyrsimg</span><span class="o">/</span><span class="n">pyrsimg</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">pyrsimg.lay_stack</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">pyrsimg.metric_proc</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">pyrsimg.metrics</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">pyrsimg.raster_vec</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">pyrsimg.rsimg_io</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">CloudStorage</span><span class="o">/</span><span class="n">OneDrive</span><span class="o">-</span><span class="n">Personal</span><span class="o">/</span><span class="n">GitHub</span><span class="o">/</span><span class="n">pyrsimg</span><span class="o">/</span><span class="n">pyrsimg</span><span class="o">/</span><span class="n">metrics</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">67</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="n">iou</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iou_score</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span>     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">iou</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">67</span> <span class="k">def</span> <span class="nf">plot_confusion_matrix</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Confusion matrix&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span>         <span class="n">cm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">cm</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+<span class="ne">NameError</span>: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -123,32 +150,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/luo/miniconda3/envs/venv-pyrsimg/lib/python3.9/site-packages/osgeo/gdal.py:287: FutureWarning: Neither gdal.UseExceptions() nor gdal.DontUseExceptions() has been explicitly called. In GDAL 4.0, exceptions will be enabled by default.
-  warnings.warn(
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR 4: `/Users/luo/Library/CloudStorage/OneDrive-Personal/GitHub/pyrsimg/docs/source/examples/data/l8_scene_05.tif&#39; not recognized as a supported file format.
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">l8_img</span> <span class="o">=</span> <span class="n">readTiff</span><span class="p">(</span><span class="n">path_img</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">l8_truth</span> <span class="o">=</span> <span class="n">readTiff</span><span class="p">(</span><span class="n">path_truth</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">l8_img</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span>
-
-<span class="nn">File ~/Library/CloudStorage/OneDrive-Personal/GitHub/pyrsimg/pyrsimg/rsimg_io.py:23,</span> in <span class="ni">readTiff.__init__</span><span class="nt">(self, path_in)</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_in</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">23</span>     <span class="n">RS_Data</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">path_in</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="bp">self</span><span class="o">.</span><span class="n">geotrans</span> <span class="o">=</span> <span class="n">RS_Data</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>  <span class="c1"># </span>
-<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="bp">self</span><span class="o">.</span><span class="n">row</span> <span class="o">=</span> <span class="n">RS_Data</span><span class="o">.</span><span class="n">RasterYSize</span>
-
-<span class="nn">File ~/miniconda3/envs/venv-pyrsimg/lib/python3.9/site-packages/osgeo/gdal.py:5298,</span> in <span class="ni">Open</span><span class="nt">(*args)</span>
-<span class="g g-Whitespace">   </span><span class="mi">5293</span><span class="w"> </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Open(char const * utf8_path, GDALAccess eAccess=GA_ReadOnly) -&gt; Dataset&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">5295</span> <span class="n">_WarnIfUserHasNotSpecifiedIfUsingExceptions</span><span class="p">()</span>
-<span class="ne">-&gt; </span><span class="mi">5298</span> <span class="k">return</span> <span class="n">_gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1410, 1690, 6)
 </pre></div>
 </div>
 </div>

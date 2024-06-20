@@ -49,9 +49,9 @@ or:
   smooth
 
 ## To do   
-
-
-
+1. check the metrics, and write the docmentation. 
+2. reprojection for the remote sensing image
+3. modify coor2coor by using shapely and pyproj package.
 
 
 
