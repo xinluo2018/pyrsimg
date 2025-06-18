@@ -39,8 +39,7 @@ or:
 
 ## visual   
 - **remote sensing image**    
-  imgShow, imsShow   
-
+  imgShow, imsShow, add_scale_bar(need to be improved for applicable for the utm projected image)    
 
 ## metrics  
 - **metrics**      
@@ -49,9 +48,10 @@ or:
   smooth
 
 ## To do   
-1. check the metrics, and write the docmentation. 
+4. modify dataio by using rasterio.
+3. check the metrics, and write the docmentation. 
 2. reprojection for the remote sensing image
-3. modify coor2coor by using shapely and pyproj package.
+1. modify coor2coor by using shapely and pyproj package.
 
 
 

@@ -1,7 +1,6 @@
 ## author: xin luo
-## create: 2020, modify: 2024.1.24
+## create: 2020, modify: 2025.6.18
 ## des: remote sensing image visualization
-
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,7 +19,7 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_
     return: None
     '''
     img = img.copy()
-    img[np.isnan(img)]=0
+    img[np.isnan(img)]=0   ## remove NaN values 
     img = np.squeeze(img)
 
     if np.min(img) == np.max(img):
@@ -56,7 +55,7 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_
         else: plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
 
 
-def imsShow(img_list, img_name_list, clip_list=None, \
+def imsShow(img_list, img_name_list, clip_list=None, figsize=(8,4),\
                             color_bands_list=None, axis=True, row=None, col=None):
     ''' des: visualize multiple images.
         input: 
@@ -76,14 +75,14 @@ def imsShow(img_list, img_name_list, clip_list=None, \
         row = 1
     if col == None:
         col = len(img_list)
+    fig, ax = plt.subplots(row, col, figsize=figsize)
     for i in range(row):
         for j in range(col):
             ind = (i*col)+j
             if ind == len(img_list):
                 break
-            plt.subplot(row, col, ind+1)
-            imgShow(img=img_list[ind], color_bands=color_bands_list[ind], \
-                                                        clip_percent=clip_list[ind])        
-            plt.title(img_name_list[ind])
-            if not axis:
-                plt.axis('off')
+            imgShow(img=img_list[ind], ax=ax[ind], 
+                        color_bands=color_bands_list[ind], clip_percent=clip_list[ind])        
+            ax[ind].set_title(img_name_list[ind])
+            if not axis: ax[ind].set_axis_off()
+

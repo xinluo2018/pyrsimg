@@ -7,7 +7,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-VERSION = '1.1.1'
+VERSION = '1.1.3'
 
 setup(
     name='pyrsimg',       # package name

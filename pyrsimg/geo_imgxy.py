@@ -55,9 +55,11 @@ def geo2imagexy(x, y, gdal_trans, rsimg_array, integer=True):
     if integer:
         row_img, col_img = np.floor(row_img).astype('int'), np.floor(col_img).astype('int')
     ## Mask out the points outside the image.
-    ids = np.where((row_img<rsimg_array.shape[0]) & (col_img<rsimg_array.shape[1]))[0]
-    row_img, col_img = row_img[ids], col_img[ids]
+    ids_out = np.where((row_img>=rsimg_array.shape[0]) | (col_img>=rsimg_array.shape[1]))[0]
+    while len(ids_out) > 0:
+        raise IndexError('The x and y out of image range')
     return row_img, col_img
+
 
 def imagexy2geo(row, col, gdal_trans):
     '''
