@@ -57,7 +57,8 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_
 
 def imsShow(img_list, img_name_list, clip_list=None, figsize=(8,4),\
                             color_bands_list=None, axis=True, row=None, col=None):
-    ''' des: visualize multiple images.
+    ''' 
+    des: visualize multiple images.
         input: 
             img_list: containes all images
             img_names_list: image names corresponding to the images
@@ -85,4 +86,5 @@ def imsShow(img_list, img_name_list, clip_list=None, figsize=(8,4),\
                         color_bands=color_bands_list[ind], clip_percent=clip_list[ind])        
             ax[ind].set_title(img_name_list[ind])
             if not axis: ax[ind].set_axis_off()
-
+    plt.show()
+                                
