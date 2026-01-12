@@ -48,11 +48,10 @@ or:
   smooth
 
 ## To do   
-4. modify dataio by using rasterio.
-3. check the metrics, and write the docmentation. 
-2. reprojection for the remote sensing image
-1. modify coor2coor by using shapely and pyproj package.
-
+1. improve the img2patch.py
+2. check the metrics, and write the docmentation. 
+3. reprojection for the remote sensing image using rasterio.
+4. replace the gdal by rasterio.
 
 
 

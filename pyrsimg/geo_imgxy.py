@@ -1,8 +1,6 @@
-### ----- 
-# author: luo xin, 
-# creat: 2021.6.15, modify: 2025.11.29
-# des: image location transform between different coordinate system. 
-# -----
+## author: luo xin, sun chenyu
+## creat: 2021.6.15, modify: 2025.11.29
+## des: image location transform between different coordinate system. 
 
 import numpy as np
 import rasterio
@@ -20,7 +18,7 @@ def get_utm_zone(lon):
 
 def coor2coor(srs_from, srs_to, x, y):
     """ Transform coordinates from srs_from to srs_to
-    input:
+    args:
         srs_from and srs_to: EPSG number, (e.g., 4326, 3031)
         x and y are x-coord and y-coord corresponding to srs_from and srs_to    
     return:
@@ -36,7 +34,7 @@ def geo2imagexy(x, y, transform, shape= None):
     '''
     des: from georeferenced location (i.e., lon, lat) to image location(col,row). 
     note: the coordinate system should be same between x/y and transform.
-    input:
+    args:
         transform: rasterio Affine object or GDAL tuple
         x: project or georeferenced x, i.e.,lon
         y: project or georeferenced y, i.e., lat
@@ -62,7 +60,7 @@ def geo2imagexy(x, y, transform, shape= None):
 def imagexy2geo(row, col, transform):
     '''
     des: image location(row, col) to georeferenced location.
-    input:
+    args:
         row, col: pixel row and column
         transform: rasterio Affine object or GDAL tuple
     return:
@@ -80,7 +78,7 @@ def imagexy2geo(row, col, transform):
 def deg2meter_resolution(degree_res, center_lat=0):
     """
     des: convert degree resolution to meter resolution
-    params:
+    args:
         degree_res: resolution in degree
         center_lat: the center latitude where the resolution is calculated
     return:
@@ -94,7 +92,7 @@ def deg2meter_resolution(degree_res, center_lat=0):
 def meter2deg_resolution(meter_res, center_lat=0):
     """
     des: convert meter resolution to degree resolution
-    params:
+    args:
         meter_res: resolution in meters
         center_lat: the reference latitude where the resolution is calculated
     return:
