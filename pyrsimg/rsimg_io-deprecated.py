@@ -4,8 +4,9 @@
 
 
 import numpy as np
-from osgeo import gdal, osr
-
+import rasterio
+from rasterio.transform import Affine
+from rasterio.crs import CRS
 ### tiff image reading
 class readTiff():
     '''
@@ -20,24 +21,26 @@ class readTiff():
         col: number of cols of the image
     '''
     def __init__(self, path_in):
-        RS_Data=gdal.Open(path_in)
-        self.geotrans = RS_Data.GetGeoTransform()  # 
-        self.row = RS_Data.RasterYSize
-        self.col = RS_Data.RasterXSize  # 
-        self.bands = RS_Data.RasterCount 
-        im_proj = RS_Data.GetProjection()
-        self.epsg_code = int(osr.SpatialReference(wkt=im_proj).GetAttrValue('AUTHORITY',1))
-        self.array = RS_Data.ReadAsArray(0, 0, self.col, self.row).astype(float)
-        if self.bands > 1:
-            self.array = np.transpose(self.array, (1, 2, 0)) # 
+        with rasterio.open(path_in) as src:
+            self.transform = src.transform  
+            self.row = src.height
+            self.col = src.width
+            self.bands = src.count
+
+            if src.crs:
+                self.epsg_code = src.crs.to_epsg()
+            else:
+                self.epsg_code = None
+            
+            self.array = src.read().astype(float)
+            if self.bands > 1:
+                self.array = np.transpose(self.array, (1, 2, 0))
+            else:
+                self.array = self.array[0, :, :]
     @property
     def geoextent(self):
-        left = self.geotrans[0]
-        up = self.geotrans[3]
-        right = left + self.geotrans[1] * self.col + self.geotrans[2] * self.row
-        bottom = up + self.geotrans[5] * self.row + self.geotrans[4] * self.col
-        extent = (left, right, bottom, up)
-        return extent
+        bounds = rasterio.transform.array_bounds(self.row, self.col, self.transform)
+        return (bounds[0], bounds[2], bounds[1], bounds[3])
 
 
 ###  .tiff image write
@@ -49,26 +52,34 @@ def writeTiff(im_data, im_geotrans, epsg_code, path_out):
     '''
     im_data = np.squeeze(im_data)
     if 'int8' in im_data.dtype.name:
-        datatype = gdal.GDT_Byte
+        dtype = 'uint8'  
     elif 'int16' in im_data.dtype.name:
-        datatype = gdal.GDT_Int16
+        dtype = 'int16'
     else:
-        datatype = gdal.GDT_Float32
-    if len(im_data.shape) == 3:
-        im_data = np.transpose(im_data, (2, 0, 1))
-        im_bands, im_height, im_width = im_data.shape
-    else:
-        im_bands,(im_height, im_width) = 1,im_data.shape
-    driver = gdal.GetDriverByName("GTiff")
-    dataset = driver.Create(path_out, im_width, im_height, im_bands, datatype, options=["TILED=YES", "COMPRESS=LZW"])
-    if(dataset!= None):
-        dataset.SetGeoTransform(im_geotrans)       # 
-        dataset.SetProjection("EPSG:" + str(epsg_code))      # 
-    if im_bands > 1:
-        for i in range(im_bands):
-            dataset.GetRasterBand(i+1).WriteArray(im_data[i])
-        del dataset
-    else:
-        dataset.GetRasterBand(1).WriteArray(im_data)
-        del dataset
+        dtype = 'float32'
 
+    if im_data.ndim == 3:
+        im_data = np.transpose(im_data, (2, 0, 1))
+        count, height, width = im_data.shape
+    else:
+        height, width = im_data.shape
+        count = 1
+        im_data = im_data[np.newaxis, :, :]
+
+    if not isinstance(im_transform, Affine):
+        im_transform = Affine.from_gdal(*im_transform)
+
+    profile = {
+        'driver': 'GTiff',
+        'height': height,
+        'width': width,
+        'count': count,
+        'dtype': dtype,
+        'crs': CRS.from_epsg(epsg_code) if epsg_code else None,
+        'transform': im_transform,
+        'tiled': True,
+        'compress': 'lzw'
+    }
+
+    with rasterio.open(path_out, 'w', **profile) as dst:
+        dst.write(im_data)

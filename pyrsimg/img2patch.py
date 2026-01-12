@@ -1,5 +1,5 @@
 ### author: xin luo, 
-### create: 2021.3.19, modify: 2023.8.19
+### create: 2021.3.19, modify: 2025.12.11
 ### des: 
 ###    1. Convert the remote sensing image to patches and in reverse.
 ###    2. Randomly crop multiple-scales patchs from the remote sening image.
@@ -7,7 +7,10 @@
 import cv2
 import random
 import numpy as np
-from osgeo import gdal
+import rasterio
+from rasterio.transform import from_origin
+from rasterio.warp import reproject, Resampling
+
 
 class img2patch():
     def __init__(self, img, patch_size, edge_overlay):
@@ -147,9 +150,8 @@ class crop2size():
           patches_group_down = [np.transpose(patch_down, (2,0,1)) for patch_down in patches_group_down]
         return patches_group_down
 
-
 class crop2extent():
-    '''  
+    '''   
     des: crop image with specific geographical extent.
     args:
         extent: list (left, right, down, up), extent for image cropping. \
@@ -159,7 +161,7 @@ class crop2extent():
         self.extent = extent
         self.size_target = size_target
     def img2extent(self, path_img, path_save=None):
-        '''
+        '''  
         crop image to given extent/size.
         arg:
             path_img: string, the image path to be croped.
@@ -169,56 +171,55 @@ class crop2extent():
         return: 
             img_croped: the croped image, np.array()
         '''
-        rs_data=gdal.Open(path_img)
-        dtype_id = rs_data.GetRasterBand(1).DataType
-        dtype_name = gdal.GetDataTypeName(dtype_id)
-        if 'int8' in dtype_name:
-            datatype = gdal.GDT_Byte
-        elif 'int16' in dtype_name:
-            datatype = gdal.GDT_UInt16
-        else:
-            datatype = gdal.GDT_Float32
-        geotrans = rs_data.GetGeoTransform()
-        dx, dy = geotrans[1], geotrans[5]
-        nbands = rs_data.RasterCount
-        proj_wkt = rs_data.GetProjection()
-        NDV = rs_data.GetRasterBand(1).GetNoDataValue()
-        xmin, xmax, ymin, ymax = self.extent
-
-        if self.size_target is None:
-            npix_x = int(np.round((xmax - xmin) / float(dx)))  # new col
-            npix_y = int(np.round((ymin - ymax) / float(dy)))  # new row
-            dx = (xmax - xmin) / float(npix_x)
-            dy = (ymin - ymax) / float(npix_y)
-        else:
-            npix_x = self.size_target[1]
-            npix_y = self.size_target[0]
-            dx = (xmax - xmin) / float(self.size_target[1])  # new resolution
-            dy = (ymin - ymax) / float(self.size_target[0])
-
-        if path_save is None:
-            driver = gdal.GetDriverByName('MEM')
-            dest = driver.Create('', npix_x, npix_y, nbands, datatype)
-        else: 
-            driver = gdal.GetDriverByName("GTiff")
-            dest = driver.Create(path_save, npix_x, npix_y, nbands, datatype)
+        with rasterio.open(path_img) as src:
+            xmin, xmax, ymin, ymax = self.extent
             
-        dest.SetProjection(proj_wkt)
-        newgeotrans = (xmin, dx, 0.0, ymax, 0.0, dy)
-        dest.SetGeoTransform(newgeotrans)
-        if NDV is not None:
-            for i in range(nbands):
-                dest.GetRasterBand(i+1).SetNoDataValue(NDV)
-                dest.GetRasterBand(i+1).Fill(NDV)
-        else:
-            for i in range(nbands):
-                dest.GetRasterBand(i+1).Fill(0)
-        gdal.ReprojectImage(rs_data, dest, proj_wkt, proj_wkt, gdal.GRA_Bilinear)
-        out_array = dest.ReadAsArray(0, 0,  npix_x,  npix_y)
-        if NDV is not None:
-            out_array = np.ma.masked_where(out_array == NDV, out_array).data
-        if nbands > 1:
-            return np.transpose(out_array, (1, 2, 0))  # 
-        else:
-            return out_array
+            # Determine Output Dimensions and Resolution
+            if self.size_target is None:
+                npix_x = int(np.round((xmax - xmin) / src.res[0]))
+                npix_y = int(np.round((ymax - ymin) / src.res[1]))
+            else:
+                npix_y, npix_x = self.size_target 
 
+            # Calculate new pixel resolution
+            pixel_width = (xmax - xmin) / npix_x
+            pixel_height = (ymax - ymin) / npix_y
+
+            # Construct destination Affine Transform
+            dst_transform = from_origin(xmin, ymax, pixel_width, pixel_height)
+            
+            # Prepare destination array
+            out_shape = (src.count, npix_y, npix_x)
+            dest_array = np.zeros(out_shape, dtype=src.dtypes[0])
+            
+            # Reproject (Warp)
+            for i in range(src.count):
+                reproject(
+                    source=rasterio.band(src, i + 1),
+                    destination=dest_array[i],
+                    src_transform=src.transform,
+                    src_crs=src.crs,
+                    dst_transform=dst_transform,
+                    dst_crs=src.crs,
+                    resampling=Resampling.bilinear,
+                    src_nodata=src.nodata,
+                    dst_nodata=src.nodata
+                )
+
+            # Save to disk if path is provided
+            if path_save is not None:
+                out_meta = src.meta.copy()
+                out_meta.update({
+                    "driver": "GTiff",
+                    "height": npix_y,
+                    "width": npix_x,
+                    "transform": dst_transform
+                })
+                with rasterio.open(path_save, "w", **out_meta) as dest:
+                    dest.write(dest_array)
+            
+            # Handle Return Shape
+            if src.count > 1:
+                return np.transpose(dest_array, (1, 2, 0))
+            else:
+                return dest_array[0]
