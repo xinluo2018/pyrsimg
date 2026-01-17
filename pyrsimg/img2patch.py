@@ -1,5 +1,5 @@
 ### author: xin luo, 
-### create: 2021.3.19, modify: 2025.12.11
+### create: 2021.3.19, modify: 2025.12.9
 ### des: 
 ###    1. Convert the remote sensing image to patches and in reverse.
 ###    2. Randomly crop multiple-scales patchs from the remote sening image.
@@ -16,7 +16,7 @@ class img2patch():
     def __init__(self, img, patch_size, edge_overlay):
         '''  
         args:
-            img: np.array()
+            img: np.array(), (H, W, C) or (H, W)
             patch_size: size of the patch
             edge_overlay: an even number, single-side overlay of the neighboring images.
         '''
@@ -32,7 +32,7 @@ class img2patch():
         self.img_patch_col = np.nan
         self.start_list = []           #  
 
-    def toPatch(self):
+    def toPatch(self, padding=True):
         '''
         des: 
             convert img to patches. 
@@ -42,13 +42,16 @@ class img2patch():
         '''
         patch_list = []
         patch_step = self.patch_size - self.edge_overlay
-        img_expand = np.pad(self.img, ((self.edge_overlay, self.patch_size),
+        img = self.img.copy()
+        if padding:
+            img = np.pad(img, ((self.edge_overlay, self.patch_size),
                                           (self.edge_overlay, self.patch_size), (0,0)), 'constant')
-        self.img_patch_row = (img_expand.shape[0]-self.edge_overlay)//patch_step
-        self.img_patch_col = (img_expand.shape[1]-self.edge_overlay)//patch_step
+    
+        self.img_patch_row = (img.shape[0]-self.edge_overlay)//patch_step
+        self.img_patch_col = (img.shape[1]-self.edge_overlay)//patch_step
         for i in range(self.img_patch_row):
             for j in range(self.img_patch_col):
-                patch_list.append(img_expand[i*patch_step:i*patch_step+self.patch_size,
+                patch_list.append(img[i*patch_step:i*patch_step+self.patch_size,
                                                         j*patch_step:j*patch_step+self.patch_size, :])
                 self.start_list.append([i*patch_step-self.edge_overlay, j*patch_step-self.edge_overlay])
         return patch_list

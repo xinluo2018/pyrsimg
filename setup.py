@@ -24,6 +24,8 @@ setup(
                       'opencv-python', 
                       'matplotlib', 
                       'scipy', 
+                      'rasterio', 
+                      'cartopy',
                       'astropy'],           ## the user should install gdal by theirself.
     python_requires='>=3.8',                ## Minimum version requirement of the package
     )

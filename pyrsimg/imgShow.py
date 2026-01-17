@@ -1,11 +1,18 @@
-## author: xin luo
-## create: 2020, modify: 2025.6.18
-## des: remote sensing image visualization
+''' 
+author: xin luo
+create: 2020, modify: 2025.12.11
+des: remote sensing image visualization
+'''
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_band_clip=False):
+def imgShow(img, 
+            ax=None, 
+            color_bands=(2,1,0),
+            clip_percent=2, 
+            per_band_clip=False,
+            **kwargs):
     '''
     Description: show the single image.
     args:
@@ -23,11 +30,11 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_
 
     if np.min(img) == np.max(img):
         if len(img.shape) == 2:
-            if ax: im = ax.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
-            else: im = plt.imshow(np.clip(img, 0, 1), extent=extent, vmin=0,vmax=1)
+            if ax: im = ax.imshow(np.clip(img, 0, 1), vmin=0,vmax=1, **kwargs)
+            else: im = plt.imshow(np.clip(img, 0, 1), vmin=0,vmax=1, **kwargs)
         else:
-            if ax: im = ax.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
-            else: im = plt.imshow(np.clip(img[:,:,0], 0, 1), extent=extent, vmin=0, vmax=1)
+            if ax: im = ax.imshow(np.clip(img[:,:,0], 0, 1), vmin=0, vmax=1, **kwargs)
+            else: im = plt.imshow(np.clip(img[:,:,0], 0, 1), vmin=0, vmax=1, **kwargs)
     else:
         if len(img.shape) == 2:
             img_color = np.expand_dims(img, axis=2)
@@ -50,9 +57,10 @@ def imgShow(img, ax=None, extent=None, color_bands=(2,1,0), clip_percent=2, per_
             img_color_clip = (img_color-img_color_hist[0])\
                                      /(img_color_hist[1]-img_color_hist[0]+0.0001)
 
-        if ax: im = ax.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
-        else: im = plt.imshow(np.clip(img_color_clip, 0, 1), extent=extent, vmin=0, vmax=1)
+        if ax: im = ax.imshow(np.clip(img_color_clip, 0, 1), vmin=0, vmax=1, **kwargs)
+        else: im = plt.imshow(np.clip(img_color_clip, 0, 1), vmin=0, vmax=1, **kwargs)
         return im
+    
 
 def imsShow(img_list, img_name_list=None, clip_list=None, figsize=(8,4),\
                             color_bands_list=None, axs=None, 
