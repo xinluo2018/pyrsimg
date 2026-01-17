@@ -1,6 +1,6 @@
 ## author: xin luo, 
 ## creat: 2021.7.15
-## modify: 2021.11.27
+## modify: 2026.1.17
 
 import numpy as np
 import rasterio
@@ -85,4 +85,3 @@ def vec2mask(path_vec, path_raster, path_save=None):
         with rasterio.open(path_save, 'w', **meta) as dst:
             dst.write(mask, 1)     
     return mask
-
