@@ -3,8 +3,8 @@
 ## des: image location transform between different coordinate system. 
 
 import numpy as np
-import rasterio
-from rasterio.transform import Affine
+import rasterio as rio
+from rasterio.transform import Affine, rowcol
 from pyproj import transformer, CRS
 
 def get_utm_zone(lon):
@@ -49,7 +49,7 @@ def geo2imagexy(x, y, transform, shape= None):
         aff = Affine.from_gdal(*transform)
     else:
         raise TypeError("Transform must be an Affine object or GDAL tuple.")
-    row_img, col_img = rasterio.transform.rowcol(aff, x, y)
+    row_img, col_img = rowcol(aff, x, y)
     ## Mask out the points outside the image.
     if shape is not None:
         h, w = shape[:2]
@@ -72,7 +72,8 @@ def imagexy2geo(row, col, transform):
         aff = Affine.from_gdal(*transform)
     else:
         raise TypeError("Transform must be an Affine object or GDAL tuple.")
-    x, y = aff * (col, row)
+    result = aff * (col, row)
+    x, y = result[0], result[1]
     return x, y
 
 def deg2meter_resolution(degree_res, center_lat=0):
