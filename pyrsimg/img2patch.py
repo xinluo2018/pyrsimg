@@ -1,4 +1,4 @@
-### author: xin luo, 
+### author: xin luo, sun chenyu
 ### create: 2021.3.19, modify: 2026.1.17
 ### des: 
 ###    1. Convert the remote sensing image to patches and in reverse.
