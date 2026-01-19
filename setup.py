@@ -7,7 +7,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-VERSION = '1.1.3'
+VERSION = '1.1.4'
 
 setup(
     name='pyrsimg',       # package name
@@ -24,9 +24,10 @@ setup(
                       'opencv-python', 
                       'matplotlib', 
                       'scipy', 
+                      'geopandas',
                       'rasterio', 
                       'cartopy',
-                      'astropy'],           ## the user should install gdal by theirself.
-    python_requires='>=3.8',                ## Minimum version requirement of the package
+                      'astropy'],     ## the user should install gdal by 
+    python_requires='>=3.8',          ## Minimum version requirement of the package
     )
 
