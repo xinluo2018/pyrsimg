@@ -1,5 +1,5 @@
 ### author: xin luo, 
-### create: 2021.3.19, modify: 2025.12.23
+### create: 2021.3.19, modify: 2026.1.17
 ### des: 
 ###    1. Convert the remote sensing image to patches and in reverse.
 ###    2. Randomly crop multiple-scales patchs from the remote sening image.
@@ -7,7 +7,9 @@
 import cv2
 import random
 import numpy as np
-from osgeo import gdal
+import rasterio
+from rasterio.warp import reproject, Resampling
+from rasterio.transform import from_bounds
 
 class img2patch():
     def __init__(self, img, patch_size, edge_overlay, drop_last=False):
@@ -161,6 +163,7 @@ class crop2extent():
     def __init__(self, extent, size_target=None):
         self.extent = extent
         self.size_target = size_target
+
     def img2extent(self, path_img, path_save=None):
         '''
         crop image to given extent/size.
@@ -172,55 +175,59 @@ class crop2extent():
         return: 
             img_croped: the croped image, np.array()
         '''
-        rs_data=gdal.Open(path_img)
-        dtype_id = rs_data.GetRasterBand(1).DataType
-        dtype_name = gdal.GetDataTypeName(dtype_id)
-        if 'int8' in dtype_name:
-            datatype = gdal.GDT_Byte
-        elif 'int16' in dtype_name:
-            datatype = gdal.GDT_UInt16
-        else:
-            datatype = gdal.GDT_Float32
-        geotrans = rs_data.GetGeoTransform()
-        dx, dy = geotrans[1], geotrans[5]
-        nbands = rs_data.RasterCount
-        proj_wkt = rs_data.GetProjection()
-        NDV = rs_data.GetRasterBand(1).GetNoDataValue()
-        xmin, xmax, ymin, ymax = self.extent
+        with rasterio.open(path_img) as src:
+            src_crs = src.crs
+            src_nodata = src.nodata
+            src_transform = src.transform
+            nbands = src.count
 
-        if self.size_target is None:
-            npix_x = int(np.round((xmax - xmin) / float(dx)))  # new col
-            npix_y = int(np.round((ymin - ymax) / float(dy)))  # new row
-            dx = (xmax - xmin) / float(npix_x)
-            dy = (ymin - ymax) / float(npix_y)
-        else:
-            npix_x = self.size_target[1]
-            npix_y = self.size_target[0]
-            dx = (xmax - xmin) / float(self.size_target[1])  # new resolution
-            dy = (ymin - ymax) / float(self.size_target[0])
+            dx_src = src_transform[0]
+            dy_src = src_transform[4] 
 
-        if path_save is None:
-            driver = gdal.GetDriverByName('MEM')
-            dest = driver.Create('', npix_x, npix_y, nbands, datatype)
-        else: 
-            driver = gdal.GetDriverByName("GTiff")
-            dest = driver.Create(path_save, npix_x, npix_y, nbands, datatype)
-            
-        dest.SetProjection(proj_wkt)
-        newgeotrans = (xmin, dx, 0.0, ymax, 0.0, dy)
-        dest.SetGeoTransform(newgeotrans)
-        if NDV is not None:
-            for i in range(nbands):
-                dest.GetRasterBand(i+1).SetNoDataValue(NDV)
-                dest.GetRasterBand(i+1).Fill(NDV)
-        else:
-            for i in range(nbands):
-                dest.GetRasterBand(i+1).Fill(0)
-        gdal.ReprojectImage(rs_data, dest, proj_wkt, proj_wkt, gdal.GRA_Bilinear)
-        out_array = dest.ReadAsArray(0, 0,  npix_x,  npix_y)
-        if NDV is not None:
-            out_array = np.ma.masked_where(out_array == NDV, out_array).data
-        if nbands > 1:
-            return np.transpose(out_array, (1, 2, 0))  # 
-        else:
+            xmin, xmax, ymin, ymax = self.extent
+            if self.size_target is None:
+                npix_x = int(np.round((xmax - xmin) / float(dx_src)))
+                npix_y = int(np.round((ymin - ymax) / float(dy_src)))
+            else:
+                npix_x = self.size_target[1] # col
+                npix_y = self.size_target[0] # row
+
+            dst_transform = from_bounds(xmin, ymin, xmax, ymax, npix_x, npix_y)
+            dst_array = np.zeros((nbands, npix_y, npix_x), dtype=src.profile['dtype'])
+
+            if src_nodata is not None:
+                dst_array.fill(src_nodata)
+            else:
+                dst_array.fill(0)
+
+            reproject(
+                source=rasterio.band(src, list(range(1, nbands + 1))),
+                destination=dst_array,
+                src_transform=src_transform,
+                src_crs=src_crs,
+                dst_transform=dst_transform,
+                dst_crs=src_crs, 
+                resampling=Resampling.bilinear,
+                src_nodata=src_nodata,
+                dst_nodata=src_nodata
+            )
+
+            if path_save is not None:
+                kwargs = src.meta.copy()
+                kwargs.update({
+                    'driver': 'GTiff',
+                    'height': npix_y,
+                    'width': npix_x,
+                    'transform': dst_transform
+                })
+                with rasterio.open(path_save, 'w', **kwargs) as dst:
+                    dst.write(dst_array)
+            if src_nodata is not None:
+                dst_array = np.ma.masked_where(dst_array == src_nodata, dst_array)
+                if hasattr(dst_array, 'data'):
+                    pass 
+            out_array = np.transpose(dst_array, (1, 2, 0))
+            if nbands == 1:
+                out_array = out_array[:, :, 0]
+
             return out_array

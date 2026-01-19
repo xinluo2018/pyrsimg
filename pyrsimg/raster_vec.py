@@ -1,10 +1,12 @@
 ## author: xin luo, 
 ## creat: 2021.7.15
-## modify: 2021.11.27
+## modify: 2026.1.11
 
 import numpy as np
-from osgeo import ogr, gdal, osr
-
+import rasterio
+from rasterio import features
+import geopandas as gpd
+from shapely.geometry import shape
 
 def raster2vec(path_raster, path_save, dn_values):
     ''' 
@@ -15,27 +17,30 @@ def raster2vec(path_raster, path_save, dn_values):
     return:
         vector (gpkg format) written to the given path.
     '''
-    raster_ds = gdal.Open(path_raster)
-    raster_band = raster_ds.GetRasterBand(1)
-    raster_srs = osr.SpatialReference()
-    raster_srs.ImportFromWkt(raster_ds.GetProjection())
-    #  create output datasource
-    dst_layername = "polygon"
-    drv = ogr.GetDriverByName('ESRI Shapefile')
-    dst_ds = drv.CreateDataSource(path_save)
-    dst_layer = dst_ds.CreateLayer(dst_layername, geom_type=ogr.wkbPolygon, srs = raster_srs)
-    newField = ogr.FieldDefn('DN', ogr.OFTInteger)
-    dst_layer.CreateField(newField)
-    dst_field = dst_layer.GetLayerDefn().GetFieldIndex('DN')
-    print(dst_layer.GetFeatureCount())
-    gdal.Polygonize(raster_band, None, dst_layer, dst_field, [])
-    print(dst_layer.GetFeatureCount())
-    for i in range(dst_layer.GetFeatureCount()):
-      fea = dst_layer.GetFeature(i)
-      if fea.GetField('DN') not in dn_values:
-        dst_layer.DeleteFeature(i)
-    dst_ds = None
+    with rasterio.open(path_raster) as src:
+        image = src.read(1) # 读取第一波段
+        transform = src.transform
+        crs = src.crs
 
+        dn_set = set(dn_values)
+        mask = np.isin(image, list(dn_set))
+
+    shapes_generator = features.shapes(image, mask=mask, transform=transform)
+    geoms = []
+    values = []
+    for polygon, value in shapes_generator:
+        val = int(value)
+        if val in dn_set:
+            geoms.append(shape(polygon))
+            values.append(val)
+    if not geoms:
+        print("No features found matching the DN values.")
+        return
+
+    gdf = gpd.GeoDataFrame({'DN': values}, geometry=geoms, crs=crs)
+    driver = 'GPKG' if path_save.endswith('.gpkg') else 'ESRI Shapefile'
+    gdf.to_file(path_save, driver=driver)
+    print(f"Vector saved to {path_save}, Feature count: {len(gdf)}")
 
 def vec2mask(path_vec, path_raster, path_save=None):
     """
@@ -46,27 +51,37 @@ def vec2mask(path_vec, path_raster, path_save=None):
         path_raster: str, path of the raster data.
         path_save: str, path to save.
     retrun: 
-        mask, np.array. and a .tiff file written to the given path.
+        mask: np.array (binary, 0/1)
     """
-    raster, vec = gdal.Open(path_raster, gdal.GA_ReadOnly), ogr.Open(path_vec)
-    x_res = raster.RasterXSize
-    y_res = raster.RasterYSize
-    layer = vec.GetLayer()
-    if path_save is None:
-        drv = gdal.GetDriverByName('MEM')
-        targetData = drv.Create('', x_res, y_res, 1, gdal.GDT_Byte)
-    else: 
-        driver = gdal.GetDriverByName("GTiff")
-        targetData = driver.Create(path_save, x_res, y_res, 1, gdal.GDT_Byte)
+    gdf = gpd.read_file(path_vec)
 
-    targetData.SetGeoTransform(raster.GetGeoTransform())
-    targetData.SetProjection(raster.GetProjection())
-    band = targetData.GetRasterBand(1)
-    NoData_value = -9999
-    band.SetNoDataValue(NoData_value)
-    band.FlushCache()
-    gdal.RasterizeLayer(targetData, [1], layer, burn_values=[1])
-    mask = targetData.ReadAsArray(0, 0, x_res, y_res)
-    mask = np.where(mask>0, 1, 0)
+    with rasterio.open(path_raster) as src:
+        out_shape = src.shape
+        out_transform = src.transform
+        meta = src.meta.copy()
+
+    if gdf.crs != meta['crs']:
+        gdf = gdf.to_crs(meta['crs'])
+    shapes = ((geom, 1) for geom in gdf.geometry)
+
+    mask = features.rasterize(
+        shapes=shapes,
+        out_shape=out_shape,
+        transform=out_transform,
+        fill=0,       
+        default_value=1, 
+        dtype=rasterio.uint8
+    )
+
+    if path_save:
+        meta.update({
+            "driver": "GTiff",
+            "height": out_shape[0],
+            "width": out_shape[1],
+            "count": 1,
+            "dtype": rasterio.uint8,
+            "nodata": 0 
+        })
+        with rasterio.open(path_save, 'w', **meta) as dst:
+            dst.write(mask, 1)     
     return mask
-
