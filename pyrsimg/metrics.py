@@ -7,11 +7,121 @@ import itertools
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, confusion_matrix
 
+class metrics_segm:
+    def __init__(self, cla_map, truth_map, 
+                 class_labels=None, mean_mode=False):
+        """
+        cla_map: predicted segmentation map, 2D numpy array of shape (H, W) or (B, H, W)
+        truth_map: ground truth map, 2D numpy array of shape matching cla_map
+        """     
+        self.cla_map = cla_map
+        self.truth_map = truth_map
+        # Ensure input shapes match
+        if cla_map.shape != truth_map.shape:
+            raise ValueError("Shape of cla_map and truth_map must match.")        
+        # Get unique class labels if not provided
+        if class_labels is None:
+            self.class_labels = np.unique(np.concatenate([cla_map.flatten(), 
+                                                          truth_map.flatten()]))
+        else:
+            self.class_labels = np.array(class_labels)
+        self.mean_mode = mean_mode
+    def _get_intersection_union(self, class_label):
+        """
+        Helper function to compute intersection and union for a specific class
+        """
+        intersection = np.logical_and(self.cla_map == class_label, 
+                                      self.truth_map == class_label).sum()
+        union = np.logical_or(self.cla_map == class_label, 
+                              self.truth_map == class_label).sum()
+        return intersection, union
 
-## --------- conventional image-based -------- ##
- 
-## --- accuracy calculation ---
-## usually used for accuracy assessment of image classificaiton 
+    @property
+    def oa(self):
+        """
+        Overall Accuracy (OA) for binary segmentation
+        """
+        oa = np.mean(self.cla_map == self.truth_map)
+        return oa
+
+    @property
+    def iou(self, target_class_labels=None):
+        """Intersection over Union (IoU) for a specific class
+        """        
+        if target_class_labels is None:
+            target_class_labels = self.class_labels    
+        iou_scores = {}
+        for c in target_class_labels:
+            intersection, union = self._get_intersection_union(c)
+            iou_scores[f'label_{c.item()}'] = intersection / (union + 1e-7)  # avoid division by zero
+        if self.mean_mode:
+            iou_scores[f'labels_mean'] = np.mean(list(iou_scores.values()))
+        return iou_scores
+
+    @property
+    def dice(self, target_class_labels=None):
+        """Dice Coefficient for a specific class
+        """        
+        if target_class_labels is None:
+            target_class_labels = self.class_labels    
+        dice_scores = {}
+        for c in target_class_labels:
+            intersection, union = self._get_intersection_union(c)
+            dice_scores[f'label_{c.item()}'] = (2 * intersection) / (union + intersection + 1e-7)  # avoid division by zero
+        if self.mean_mode:
+            dice_scores['labels_mean'] = np.mean(list(dice_scores.values()))
+        return dice_scores
+
+    @property
+    def precision(self, target_class_labels=None):
+        """Precision for a specific class
+        """        
+        if target_class_labels is None:
+            target_class_labels = self.class_labels    
+        precision_scores = {}
+        for c in target_class_labels:
+            tp = np.logical_and(self.cla_map == c, self.truth_map == c).sum()
+            fp = np.logical_and(self.cla_map == c, self.truth_map != c).sum()
+            precision_scores[f'label_{c.item()}'] = tp / (tp + fp + 1e-7)  # avoid division by zero
+        if self.mean_mode:
+            precision_scores['labels_mean'] = np.mean(list(precision_scores.values()))
+        return precision_scores
+
+    @property
+    def recall(self, target_class_labels=None):
+        """Recall for a specific class
+        """        
+        if target_class_labels is None:
+            target_class_labels = self.class_labels    
+        recall_scores = {}
+        for c in target_class_labels:
+            tp = np.logical_and(self.cla_map == c, self.truth_map == c).sum()
+            fn = np.logical_and(self.cla_map != c, self.truth_map == c).sum()
+            recall_scores[f'label_{c.item()}'] = tp / (tp + fn + 1e-7)  # avoid division by zero
+        if self.mean_mode:
+            recall_scores['labels_mean'] = np.mean(list(recall_scores.values()))
+        return recall_scores
+
+    @property
+    def f1_score(self, target_class_labels=None):
+        """F1 Score for a specific class
+        """        
+        if target_class_labels is None:
+            target_class_labels = self.class_labels    
+        f1_scores = {}
+        for c in target_class_labels:
+            tp = np.logical_and(self.cla_map == c, self.truth_map == c).sum()
+            fp = np.logical_and(self.cla_map == c, self.truth_map != c).sum()
+            fn = np.logical_and(self.cla_map != c, self.truth_map == c).sum()
+            precision = tp / (tp + fp + 1e-7)
+            recall = tp / (tp + fn + 1e-7)
+            f1_scores[f'label_{c.item()}'] = (2 * precision * recall) / (precision + recall + 1e-7)    
+        if self.mean_mode:
+            f1_scores['labels_mean'] = np.mean(list(f1_scores.values()))
+        return f1_scores
+
+## note: should separate the pixel-based accuracy matrix 
+#         and the image-based accuracy matrix.
 def acc_matrix(cla_map, truth_map=None, sam_pixel=None, id_label=None):
     ''' 
     des: calculate the accuracy matrix
@@ -46,6 +156,7 @@ def acc_matrix(cla_map, truth_map=None, sam_pixel=None, id_label=None):
     else:
         return acc_oa, confus_mat
 
+## note: deprecated, use metrics_segm instead
 def acc_miou(cla_map, truth_map, labels=None):
     '''
     des: calculate the mean IoU metric.

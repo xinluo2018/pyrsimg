@@ -7,9 +7,8 @@ import numpy as np
 import cartopy.crs as ccrs
 from matplotlib.patches import Polygon
 
-
 def add_scale_bar(ax, length=None, crs = ccrs.Mercator(), 
-                      loc=(0.5, 0.05), linewidth=3, 
+                      loc=(0.5, 0.05), linewidth=3, fontsize=12,
                       color_bar='black', color_text='black'):
     """
     params:
@@ -47,7 +46,7 @@ def add_scale_bar(ax, length=None, crs = ccrs.Mercator(),
     #Plot the scalebar
     ax.plot(bar_xs, [sby, sby], transform=crs, color=color_bar, linewidth=linewidth)
     #Plot the scalebar label
-    ax.text(sbx, sby+text_space, str(length) + ' km', transform=crs,
+    ax.text(sbx, sby+text_space, str(length) + ' km', transform=crs, fontsize=fontsize,
             horizontalalignment='center', verticalalignment='bottom', color=color_text)
 
 def add_north_arrow(ax, loc=(0.95, 0.85), size = [0.05, 0.05],

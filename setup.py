@@ -7,7 +7,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-VERSION = '1.1.4'
+VERSION = '1.1.5'
 
 setup(
     name='pyrsimg',       # package name
@@ -28,6 +28,6 @@ setup(
                       'rasterio', 
                       'cartopy',
                       'astropy'],     ## the user should install gdal by 
-    python_requires='>=3.8',          ## Minimum version requirement of the package
+    python_requires='>=3.10',          ## Minimum version requirement of the package
     )
 

@@ -7,9 +7,6 @@
 import cv2
 import random
 import numpy as np
-import rasterio
-from rasterio.warp import reproject, Resampling
-from rasterio.transform import from_bounds
 
 class img2patch():
     def __init__(self, img, patch_size, edge_overlay, drop_last=False):
@@ -153,81 +150,5 @@ class crop2patch():
           patches_group = [np.transpose(patch_down, (2,0,1)) for patch_down in patches_group]
         return patches_group
 
-class crop2extent():
-    '''  
-    des: crop image with specific geographical extent.
-    args:
-        extent: list (left, right, down, up), extent for image cropping. \
-                              the extent should agree with the projection of input image.
-    '''
-    def __init__(self, extent, size_target=None):
-        self.extent = extent
-        self.size_target = size_target
 
-    def img2extent(self, path_img, path_save=None):
-        '''
-        crop image to given extent/size.
-        arg:
-            path_img: string, the image path to be croped.
-            size_target: size to which image should be croped 
-                  list/tuple, (row, col)
-            path_save: string, the path for output saving.    
-        return: 
-            img_croped: the croped image, np.array()
-        '''
-        with rasterio.open(path_img) as src:
-            src_crs = src.crs
-            src_nodata = src.nodata
-            src_transform = src.transform
-            nbands = src.count
 
-            dx_src = src_transform[0]
-            dy_src = src_transform[4] 
-
-            xmin, xmax, ymin, ymax = self.extent
-            if self.size_target is None:
-                npix_x = int(np.round((xmax - xmin) / float(dx_src)))
-                npix_y = int(np.round((ymin - ymax) / float(dy_src)))
-            else:
-                npix_x = self.size_target[1] # col
-                npix_y = self.size_target[0] # row
-
-            dst_transform = from_bounds(xmin, ymin, xmax, ymax, npix_x, npix_y)
-            dst_array = np.zeros((nbands, npix_y, npix_x), dtype=src.profile['dtype'])
-
-            if src_nodata is not None:
-                dst_array.fill(src_nodata)
-            else:
-                dst_array.fill(0)
-
-            reproject(
-                source=rasterio.band(src, list(range(1, nbands + 1))),
-                destination=dst_array,
-                src_transform=src_transform,
-                src_crs=src_crs,
-                dst_transform=dst_transform,
-                dst_crs=src_crs, 
-                resampling=Resampling.bilinear,
-                src_nodata=src_nodata,
-                dst_nodata=src_nodata
-            )
-
-            if path_save is not None:
-                kwargs = src.meta.copy()
-                kwargs.update({
-                    'driver': 'GTiff',
-                    'height': npix_y,
-                    'width': npix_x,
-                    'transform': dst_transform
-                })
-                with rasterio.open(path_save, 'w', **kwargs) as dst:
-                    dst.write(dst_array)
-            if src_nodata is not None:
-                dst_array = np.ma.masked_where(dst_array == src_nodata, dst_array)
-                if hasattr(dst_array, 'data'):
-                    pass 
-            out_array = np.transpose(dst_array, (1, 2, 0))
-            if nbands == 1:
-                out_array = out_array[:, :, 0]
-
-            return out_array
