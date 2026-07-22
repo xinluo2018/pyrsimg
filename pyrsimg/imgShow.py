@@ -1,11 +1,13 @@
 ''' 
 author: xin luo
-create: 2020, modify: 2025.12.11
+create: 2020, modify: 2026.7.22
 des: remote sensing image visualization
 '''
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+from pyproj import Transformer
 
 def imgShow(img, 
             ax=None, 
@@ -20,7 +22,7 @@ def imgShow(img,
         ax: axes for showing image.
         extent: list(left, right, bottom, top), the coordinates of the extent. 
         num_bands: a list/tuple, [red_band,green_band,blue_band]
-        clip_percent: for linear strech, value within the range of 0-100. 
+        clip_percent: list/tuple/int/float for linear strech, value within the range of 0-100. 
         per_band_clip: if True, the band values will be clipped by each band respectively. 
     return: None
     '''
@@ -43,15 +45,15 @@ def imgShow(img,
         img_color_clip = np.zeros_like(img_color)
         if per_band_clip == True:
             for i in range(img_color.shape[-1]):
-                if clip_percent == 0:
-                    img_color_hist = [0,1]
+                if isinstance(clip_percent, (list, tuple)) and len(clip_percent) == 2:
+                    img_color_hist = [np.percentile(img_color, clip_percent[0]), np.percentile(img_color, clip_percent[1])]
                 else:
-                    img_color_hist = np.percentile(img_color[:,:,i], [clip_percent, 100-clip_percent])
+                    img_color_hist = np.percentile(img_color, [clip_percent, 100-clip_percent])                
                 img_color_clip[:,:,i] = (img_color[:,:,i]-img_color_hist[0])\
-                                    /(img_color_hist[1]-img_color_hist[0]+0.0001)
+                                    /(img_color_hist[1]-img_color_hist[0]+0.0001)                
         else:
-            if clip_percent == 0:
-                    img_color_hist = [0,1]
+            if isinstance(clip_percent, (list, tuple)) and len(clip_percent) == 2:
+                img_color_hist = [np.percentile(img_color, clip_percent[0]), np.percentile(img_color, clip_percent[1])]
             else:
                 img_color_hist = np.percentile(img_color, [clip_percent, 100-clip_percent])
             img_color_clip = (img_color-img_color_hist[0])\
@@ -98,4 +100,26 @@ def imsShow(img_list, img_name_list=None, clip_list=None, figsize=(8,4),\
                         color_bands=color_bands_list[ind], clip_percent=clip_list[ind], extent=extent_list[ind])     
             if img_name_list: axs[ind].set_title(img_name_list[ind])
             if not axis_ticks: axs[ind].set_axis_off()
-    return axs
+    return axs   
+
+def add_extent(ax, extent, ax_epsg=None, extent_epsg=None, **kwargs):
+    '''
+    ax: ax    
+    extent: [xmin, xmax, ymin, ymax]    
+    ax_espg: espg code of the ax
+    extent_spsg: espg code of the geoextent.     
+    '''
+    xmin, xmax, ymin, ymax = extent
+    if ax_epsg != extent_epsg:
+        transformer = Transformer.from_crs(
+                f"EPSG:{extent_epsg}",
+                f"EPSG:{ax_epsg}",
+                always_xy=True)
+        xmin, ymin = transformer.transform(xmin, ymin)
+        xmax, ymax = transformer.transform(xmax, ymax)
+    ax.add_patch(Rectangle(
+        (xmin, ymin),
+        xmax - xmin,
+        ymax - ymin,
+        fill=False, **kwargs))
+
