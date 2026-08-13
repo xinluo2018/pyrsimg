@@ -12,7 +12,7 @@ from pyproj import Transformer
 def imgShow(img, 
             ax=None, 
             color_bands=(2,1,0),
-            clip_percent=2, 
+            clip_percent: list|tuple|int|float=2, 
             per_band_clip=False,
             **kwargs):
     '''

@@ -1,5 +1,5 @@
 ### author: xin luo, sun chenyu
-### create: 2021.3.19, modify: 2026.1.17
+### create: 2021.3.19, modify: 2026.8.13
 ### des: 
 ###    1. Convert the remote sensing image to patches and in reverse.
 ###    2. Randomly crop multiple-scales patchs from the remote sening image.
@@ -7,14 +7,16 @@
 import cv2
 import random
 import numpy as np
+import rasterio
+from rasterio.warp import reproject, Resampling
+from rasterio.transform import from_bounds
 
 class img2patch():
-    def __init__(self, img, patch_size, edge_overlay, drop_last=False):
+    def __init__(self, img, patch_size, edge_overlay):
         ''' edge_overlay = left overlay or, right overlay
         edge_overlay should be an even number. '''
         if edge_overlay % 2 != 0:
             raise ValueError('Argument edge_overlay should be an even number')
-        self.drop_last = drop_last
         self.edge_overlay = edge_overlay        
         self.patch_size = patch_size
         self.img = img[:,:,np.newaxis] if len(img.shape) == 2 else img
@@ -23,6 +25,18 @@ class img2patch():
         self.num_patch_row = np.nan    # valid when call toPatch
         self.num_patch_col = np.nan
         self.start_list = []       #  
+        self.img_for_patch = None
+
+    def _get_start_positions(self, image_size):
+        '''Generate sliding-window starts and align the last patch to the boundary.'''
+        patch_step = self.patch_size-self.edge_overlay
+        if image_size <= self.patch_size:
+            return [0]
+        starts = list(range(0, image_size-self.patch_size+1, patch_step))
+        last_start = image_size-self.patch_size
+        if starts[-1] != last_start:
+            starts.append(last_start)
+        return starts
 
     def toPatch(self):
         '''
@@ -33,21 +47,22 @@ class img2patch():
             start_list, contains all start positions(row, col) of the generated patches. 
         '''
         patch_list = []
-        patch_step = self.patch_size - self.edge_overlay
-        ## the padding method: (1) to ensure all image area is covered (the last patch covers the padding area); 
-        ##                     (2) make the same edge removing for all patches
-        img_expand = np.pad(self.img, ((self.edge_overlay, self.patch_size),
-                                          (self.edge_overlay, self.patch_size), (0,0)), 'constant')
-        self.num_patch_row = (img_expand.shape[0]-self.edge_overlay)//patch_step
-        self.num_patch_col = (img_expand.shape[1]-self.edge_overlay)//patch_step
-        if self.drop_last:
-            self.num_patch_row -= 1
-            self.num_patch_col -= 1
-        for i in range(self.num_patch_row):
-            for j in range(self.num_patch_col):
-                patch_list.append(img_expand[i*patch_step:i*patch_step+self.patch_size,
-                                                        j*patch_step:j*patch_step+self.patch_size, :])
-                self.start_list.append([i*patch_step-self.edge_overlay, j*patch_step-self.edge_overlay])
+        self.start_list.clear()
+        row_starts = self._get_start_positions(self.img_row)
+        col_starts = self._get_start_positions(self.img_col)
+        ## Padding is only needed when an image dimension is smaller than one patch.
+        pad_bottom = max(0, self.patch_size-self.img_row)
+        pad_right = max(0, self.patch_size-self.img_col)
+        self.img_for_patch = np.pad(self.img, ((0, pad_bottom),
+                                        (0, pad_right), (0,0)),
+                                        mode='constant', constant_values=0)
+        self.num_patch_row = len(row_starts)
+        self.num_patch_col = len(col_starts)
+        for row_start in row_starts:
+            for col_start in col_starts:
+                patch_list.append(self.img_for_patch[row_start:row_start+self.patch_size,
+                                                        col_start:col_start+self.patch_size, :])
+                self.start_list.append([row_start, col_start])
         return patch_list
 
     def higher_patch_crop(self, higher_patch_size):
@@ -64,15 +79,15 @@ class img2patch():
             higher_patch_list, list, contains higher-scale patches corresponding to the lower-scale patches.
         '''
         higher_patch_list = []
+        if self.img_for_patch is None:
+            raise RuntimeError('The toPatch() should be called before higher_patch_crop()')
         radius_bias = higher_patch_size//2-self.patch_size//2
-        img_expand = np.pad(self.img, ((self.edge_overlay, self.patch_size), \
-                                            (self.edge_overlay, self.patch_size), (0,0)), 'constant')
-        img_expand_higher = np.pad(img_expand, ((radius_bias, radius_bias), \
-                                            (radius_bias, radius_bias), (0,0)), 'constant')
-        start_list_new = list(np.array(self.start_list)+self.edge_overlay+radius_bias)
-        for start_i in start_list_new:
-            higher_row_start, higher_col_start = start_i[0]-radius_bias, start_i[1]-radius_bias
-            higher_patch = img_expand_higher[higher_row_start:higher_row_start+higher_patch_size, \
+        img_for_higher_patch = np.pad(self.img_for_patch, ((radius_bias, radius_bias), \
+                                            (radius_bias, radius_bias), (0,0)),
+                                            mode='constant', constant_values=0)
+        for start_i in self.start_list:
+            higher_row_start, higher_col_start = start_i
+            higher_patch = img_for_higher_patch[higher_row_start:higher_row_start+higher_patch_size, \
                                                             higher_col_start:higher_col_start+higher_patch_size,:]
             higher_patch_list.append(higher_patch)
         return higher_patch_list
@@ -83,15 +98,22 @@ class img2patch():
             merge patches into one image. 
             (!!note: the toPatch() should be firstly called when use toImage())
         '''
-        if self.drop_last:
-            raise ValueError('The drop_last is set to True, cannot merge patches to full image')
-        patch_list = [patch[self.edge_overlay//2:-self.edge_overlay//2, self.edge_overlay//2:-self.edge_overlay//2,:]
-                                                        for patch in patch_list]
-        patch_list = [np.hstack((patch_list[i*self.num_patch_col:i*self.num_patch_col+self.num_patch_col]))
-                                                        for i in range(int(self.num_patch_row))]
-        img_array = np.vstack(patch_list)
-        img_array = img_array[self.edge_overlay//2:self.img_row+self.edge_overlay//2, \
-            self.edge_overlay//2:self.img_col+self.edge_overlay//2,:]
+        if len(patch_list) != len(self.start_list):
+            raise ValueError('The number of patches does not match start_list')
+        num_channels = patch_list[0].shape[2]
+        output_dtype = np.result_type(patch_list[0].dtype, np.float32)
+        img_array = np.zeros((self.img_row, self.img_col, num_channels), dtype=output_dtype)
+        weight = np.zeros((self.img_row, self.img_col, 1), dtype=np.float32)
+        for patch, start_i in zip(patch_list, self.start_list):
+            row_start, col_start = start_i
+            row_end = min(row_start+self.patch_size, self.img_row)
+            col_end = min(col_start+self.patch_size, self.img_col)
+            valid_row = row_end-row_start
+            valid_col = col_end-col_start
+            img_array[row_start:row_end, col_start:col_end, :] += \
+                patch[:valid_row, :valid_col, :]
+            weight[row_start:row_end, col_start:col_end, :] += 1
+        img_array /= np.maximum(weight, 1)
         return img_array
 
 class crop2patch():
@@ -149,6 +171,4 @@ class crop2patch():
         if self.channel_first:
           patches_group = [np.transpose(patch_down, (2,0,1)) for patch_down in patches_group]
         return patches_group
-
-
 
