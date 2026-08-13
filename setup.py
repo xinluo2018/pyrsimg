@@ -7,7 +7,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 
-VERSION = '1.1.6'
+VERSION = '1.1.7'
 
 setup(
     name='pyrsimg',       # package name
@@ -30,4 +30,3 @@ setup(
                       'astropy'],     ## the user should install gdal by 
     python_requires='>=3.10',          ## Minimum version requirement of the package
     )
-
